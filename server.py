@@ -1,7 +1,7 @@
 import os
 import flask
-from pywps import Service, Process, ComplexInput, Format, ComplexOutput, FORMATS, LiteralOutput, LiteralInput
-from pywps.wpsserver import PyWPSServerAbstract, temp_dir
+from pywps import Service
+from pywps.wpsserver import PyWPSServerAbstract
 from pywps import config
 
 
@@ -23,7 +23,6 @@ class Server(PyWPSServerAbstract):
         self.port = int(config.get_config_value('wps', 'serverport'))
 
         self.processes = processes
-
         self.service = Service(processes=self.processes)
 
     def run(self):

@@ -10,17 +10,7 @@ from processes.sleep import Sleep
 from processes.ultimate_question import UltimateQuestion
 from processes.centroids import Centroids
 from processes.sayhello import SayHello
-from pywps import Process, ComplexInput, ComplexOutput, Format
-
-
-def feature_count(request, response):
-    import lxml.etree
-    from pywps.app import xpath_ns
-
-    doc = lxml.etree.parse(request.inputs['layer'])
-    feature_elements = xpath_ns(doc, '//gml:featureMember')
-    response.outputs['count'] = str(len(feature_elements))
-    return response
+from processes.feature_count import FeatureCount
 
 
 def main():
@@ -38,9 +28,7 @@ def main():
     port = int(port)
 
     processes = [
-        Process(feature_count,
-                inputs=[ComplexInput('layer', 'Layer', [Format('SHP')])],
-                outputs=[ComplexOutput('layer', 'Layer', [Format('GML')])]),
+        FeatureCount(),
         SayHello(),
         Centroids(),
         UltimateQuestion(),

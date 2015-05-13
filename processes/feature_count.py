@@ -1,11 +1,12 @@
-from pywps import Process, ComplexInput, ComplexOutput
+from pywps import Process, ComplexInput, ComplexOutput, Format
+
 
 class FeatureCount(Process):
     def __init__(self):
-        inputs=[ComplexInput('layer', 'Layer', [Format('SHP')])],
-        outputs=[ComplexOutput('layer', 'Layer', [Format('GML')])]),
+        inputs = [ComplexInput('layer', 'Layer', [Format('SHP')])],
+        outputs = [ComplexOutput('layer', 'Layer', [Format('GML')])]
         
-    super(Sleep, self).__init__(
+        super(FeatureCount, self).__init__(
             self._handler,
             identifier='feature_count',
             version='None',

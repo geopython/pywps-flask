@@ -86,7 +86,7 @@ class Server(PyWPSServerAbstract):
     def run(self):
         @self.app.route('/')
         def index():
-            url = flask.url_for('Server:wps', _external=True)
+            url = flask.url_for('wps', _external=True)
             return flask.render_template('home.html', url=url)
 
         @self.app.route('/wps', methods=['GET', 'POST'])

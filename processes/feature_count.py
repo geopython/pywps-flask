@@ -3,7 +3,7 @@ from pywps import Process, ComplexInput, ComplexOutput, Format
 
 class FeatureCount(Process):
     def __init__(self):
-        inputs = [ComplexInput('layer', 'Layer', [Format('SHP')])],
+        inputs = [ComplexInput('layer', 'Layer', [Format('SHP')])]
         outputs = [ComplexOutput('layer', 'Layer', [Format('GML')])]
         
         super(FeatureCount, self).__init__(

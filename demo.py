@@ -13,6 +13,7 @@ from processes.ultimate_question import UltimateQuestion
 from processes.centroids import Centroids
 from processes.sayhello import SayHello
 from processes.feature_count import FeatureCount
+from processes.brauni import Brauni
 
 
 def main():
@@ -29,14 +30,20 @@ def main():
         SayHello(),
         Centroids(),
         UltimateQuestion(),
-        Sleep()
+        Sleep(),
+        Brauni()
     ]
 
-    s = Server(debug=debug, processes=processes, config_file=config_file)
+    s = Server(processes=processes, config_file=config_file)
 
     # TODO: need to spawn a different process for different server
     if args.waitress:
         import waitress
+        from pywps import config
+
+        config.load_configuration(config_file)
+        host = config.get_config_value('wps', 'serveraddress').split('://')[1]
+        port = int(config.get_config_value('wps', 'serverport'))
 
         waitress.serve(s.app, host=host, port=port)
     else:

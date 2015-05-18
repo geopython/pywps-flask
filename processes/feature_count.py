@@ -1,10 +1,10 @@
-from pywps import Process, ComplexInput, ComplexOutput, Format
+from pywps import Process, ComplexInput, Format, LiteralOutput
 
 
 class FeatureCount(Process):
     def __init__(self):
-        inputs = [ComplexInput('layer', 'Layer', [Format('SHP')])]
-        outputs = [ComplexOutput('layer', 'Layer', [Format('GML')])]
+        inputs = [ComplexInput('layer', 'Layer', [Format('GML')])]
+        outputs = [LiteralOutput('count', 'Count', data_type='integer')]
         
         super(FeatureCount, self).__init__(
             self._handler,
@@ -25,7 +25,7 @@ class FeatureCount(Process):
     def _handler(request, response):
         import lxml.etree
         from pywps.app import xpath_ns
-        doc = lxml.etree.parse(request.inputs['layer'])
+        doc = lxml.etree.parse(request.inputs['layer'].file)
         feature_elements = xpath_ns(doc, '//gml:featureMember')
-        response.outputs['count'] = str(len(feature_elements))
+        response.outputs['count'].data = len(feature_elements)
         return response      

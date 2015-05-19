@@ -1,26 +1,42 @@
 import os
 import flask
 from pywps import Service
+from pywps.exceptions import NoApplicableCode
 from pywps.wpsserver import PyWPSServerAbstract
 from pywps import config
 
 
 class Server(PyWPSServerAbstract):
-    def __init__(self, host='localhost', port='5000', debug=False, processes=[], config_file=None):
+    def __init__(self, host=None, port=None, debug=False, processes=[], config_file=None):
         self.app = flask.Flask(__name__)
-        self.host = host
-        self.port = port
-        self.debug = debug
 
         # Load config files and override settings if any file specified
         if config_file:
             config.load_configuration(config_file)
+            self.host = config.get_config_value('wps', 'serveraddress').split('://')[1]
+            self.port = int(config.get_config_value('wps', 'serverport'))
+
+        # Override config host and port if they are passed to the constructor
+        if host:
+            self.host = host
+        if port:
+            self.port = port
+        self.debug = debug
 
         self.output_url = config.get_config_value('server', 'outputUrl')
         self.output_path = config.get_config_value('server', 'outputPath')
         self.temp_path = config.get_config_value('server', 'tempPath')
-        self.host = config.get_config_value('wps', 'serveraddress').split('://')[1]
-        self.port = int(config.get_config_value('wps', 'serverport'))
+
+        # check if in the configuration file specified directory exists otherwise create it
+        try:
+            if not os.path.exists(self.temp_path):
+                os.makedirs(self.temp_path)
+                print('%s does not exist. Creating it.' % self.temp_path)
+            if not os.path.exists(self.output_path):
+                os.makedirs(self.output_path)
+                print('%s does not exist. Creating it.' % self.output_path)
+        except Exception as e:
+            raise NoApplicableCode('File error: Could not create folder. %s' % e)
 
         self.processes = processes
         self.service = Service(processes=self.processes)

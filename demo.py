@@ -13,7 +13,7 @@ from processes.ultimate_question import UltimateQuestion
 from processes.centroids import Centroids
 from processes.sayhello import SayHello
 from processes.feature_count import FeatureCount
-from processes.brauni import Brauni
+from processes.buffer import Buffer
 from processes.area import Area
 
 
@@ -32,7 +32,7 @@ def main():
         Centroids(),
         UltimateQuestion(),
         Sleep(),
-        Brauni(),
+        Buffer(),
         Area()
     ]
 

@@ -10,11 +10,12 @@ from pywps.wpsserver import temp_dir
 class Area(Process):
     def __init__(self):
         inputs = [ComplexInput('layer', 'Layer', [Format('GML')])]
-        outputs = [LiteralOutput('area', data_type='string')]
+        outputs = [LiteralOutput('area', 'Area', data_type='string')]
 
         super(Area, self).__init__(
             self._handler,
             identifier='area',
+            title='Process Area',
             inputs=inputs,
             outputs=outputs,
             store_supported=True,

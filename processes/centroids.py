@@ -13,6 +13,7 @@ class Centroids(Process):
         super(Centroids, self).__init__(
             self._handler,
             identifier='centroids',
+            title='Process Centroids',
             inputs=inputs,
             outputs=outputs,
             store_supported=True,

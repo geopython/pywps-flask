@@ -56,9 +56,8 @@ class Server(PyWPSServerAbstract):
             for data_file in os.listdir(self.output_path):
                 if data_file == uuid:
                     file_ext = os.path.splitext(data_file)[1]
-                    file_obj = open(os.path.join(self.output_path, data_file))
-                    file_bytes = file_obj.read()
-                    file_obj.close()
+                    with open(os.path.join(self.output_path, data_file), mode='rb') as f:
+                        file_bytes = f.read()
                     mime_type = None
                     if 'xml' in file_ext:
                         mime_type = 'text/xml'

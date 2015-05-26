@@ -17,7 +17,6 @@ class SayHello(Process):
             status_supported=True
         )
 
-    @staticmethod
-    def _handler(request, response):
+    def _handler(self, request, response):
         response.outputs['response'].data = 'Hello ' + request.inputs['name'].data
         return response

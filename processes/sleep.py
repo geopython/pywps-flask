@@ -21,8 +21,7 @@ class Sleep(Process):
             status_supported=True
         )
 
-    @staticmethod
-    def _handler(request, response):
+    def _handler(self, request, response):
         import time
 
         sleep_delay = request.inputs['delay'].data

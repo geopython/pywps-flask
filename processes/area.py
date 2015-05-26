@@ -22,8 +22,7 @@ class Area(Process):
             status_supported=True
         )
 
-    @staticmethod
-    def _handler(request, response):
+    def _handler(self, request, response):
          # ogr2ogr requires gdal-bin
         from shapely.geometry import shape
         with temp_dir() as tmp:
@@ -31,7 +30,8 @@ class Area(Process):
             input_geojson = os.path.join(tmp, 'input.geojson')
             subprocess.check_call(['ogr2ogr', '-f', 'geojson',
                                    str(input_geojson), input_gml])
-            data = json.loads(input_geojson.read_file('r'))
+            with open(input_geojson, 'rb') as f:
+                data = json.loads(f.read())
             features = []
             for feature in data['features']:
                 geom = shape(feature['geometry'])

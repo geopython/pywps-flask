@@ -21,7 +21,6 @@ class UltimateQuestion(Process):
             status_supported=False
         )
 
-    @staticmethod
-    def _handler(request, response):
+    def _handler(self, request, response):
         response.outputs['answer'].data = '42'
         return response

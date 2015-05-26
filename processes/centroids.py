@@ -20,8 +20,7 @@ class Centroids(Process):
             status_supported=True
         )
 
-    @staticmethod
-    def _handler(request, response):
+    def _handler(self, request, response):
          # ogr2ogr requires gdal-bin
         from shapely.geometry import shape, mapping
 
@@ -30,7 +29,8 @@ class Centroids(Process):
             input_geojson = os.path.join(tmp, 'input.geojson')
             subprocess.check_call(['ogr2ogr', '-f', 'geojson',
                                    input_geojson, input_gml])
-            data = json.loads(input_geojson.read_file('r'))
+            with open(input_geojson, 'rb') as f:
+                data = json.loads(f.read())
             for feature in data['features']:
                 geom = shape(feature['geometry'])
                 feature['geometry'] = mapping(geom.centroid)

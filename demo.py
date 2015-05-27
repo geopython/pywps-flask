@@ -41,11 +41,11 @@ def main():
     # TODO: need to spawn a different process for different server
     if args.waitress:
         import waitress
-        from pywps import config
+        from pywps import configuration
 
-        config.load_configuration(config_file)
-        host = config.get_config_value('wps', 'serveraddress').split('://')[1]
-        port = int(config.get_config_value('wps', 'serverport'))
+        configuration.load_configuration(config_file)
+        host = configuration.get_config_value('wps', 'serveraddress').split('://')[1]
+        port = int(configuration.get_config_value('wps', 'serverport'))
 
         waitress.serve(s.app, host=host, port=port)
     else:

@@ -3,7 +3,7 @@ import flask
 from pywps import Service
 from pywps.exceptions import NoApplicableCode
 from pywps.wpsserver import PyWPSServerAbstract
-from pywps import config
+from pywps import configuration
 
 
 class Server(PyWPSServerAbstract):
@@ -12,9 +12,9 @@ class Server(PyWPSServerAbstract):
 
         # Load config files and override settings if any file specified
         if config_file:
-            config.load_configuration(config_file)
-            self.host = config.get_config_value('wps', 'serveraddress').split('://')[1]
-            self.port = int(config.get_config_value('wps', 'serverport'))
+            configuration.load_configuration(config_file)
+            self.host = configuration.get_config_value('wps', 'serveraddress').split('://')[1]
+            self.port = int(configuration.get_config_value('wps', 'serverport'))
 
         # Override config host and port if they are passed to the constructor
         if host:
@@ -23,9 +23,9 @@ class Server(PyWPSServerAbstract):
             self.port = port
         self.debug = debug
 
-        self.output_url = config.get_config_value('server', 'outputUrl')
-        self.output_path = config.get_config_value('server', 'outputPath')
-        self.temp_path = config.get_config_value('server', 'tempPath')
+        self.output_url = configuration.get_config_value('server', 'outputUrl')
+        self.output_path = configuration.get_config_value('server', 'outputPath')
+        self.temp_path = configuration.get_config_value('server', 'tempPath')
 
         # check if in the configuration file specified directory exists otherwise create it
         try:

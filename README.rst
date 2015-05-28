@@ -37,9 +37,3 @@ Simply run the python file::
 
     $ python demo.py
 
-
-Issues
-~~~~~~
-On Windows PyWPS-4 does not support multiprocessing which is used when making
-requests storing the response document and updating the status to displaying to the user
-the progression of a process.

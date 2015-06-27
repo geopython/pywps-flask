@@ -6,6 +6,8 @@ import sys
 from flask import request
 
 # CAUTION! This line is only used for a development environment, when pywps is not installed
+from werkzeug.wrappers import Response
+
 sys.path.append(os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
     os.path.pardir))
@@ -68,7 +70,7 @@ def main():
     else:
         rest_app = flask.Flask(__name__)
 
-        @rest_app.route('/rest/server', methods=['GET', 'PUT', 'DELETE'])
+        @rest_app.route('/rest/server', methods=['GET', 'POST'])
         def rest_servers():
             js = {}
             for s in server_instances:
@@ -80,7 +82,9 @@ def main():
                 json_server['port'] = server.port
                 json_server['alive'] = process.is_alive()
                 js[s] = json_server
-            return flask.jsonify(js)
+            response = flask.jsonify(js)
+            response.status_code = 200
+            return response
 
         @rest_app.route('/rest/server/<int:serverid>', methods=['GET', 'PUT', 'DELETE'])
         def rest_server(serverid):
@@ -93,38 +97,54 @@ def main():
                     json_server['host'] = server.host
                     json_server['port'] = server.port
                     json_server['alive'] = process.is_alive()
-                    return flask.jsonify(json_server)
+                    response = flask.jsonify(json_server)
+                    response.status_code = 200
+                    return response
                 except:
-                    return 'GET ERROR'
+                    return Response(status=500)
 
             if request.method == 'PUT':
                 try:
-                    server_put = Server(processes=processes, host='0.0.0.0', port=5007)
-                    server_list.append(server_put)
+                    # only parse json and if Header Content-Type is application/json
+                    data = request.get_json()
 
+                    if 'host' not in data:
+                        return Response(response='No host specified!', status=400)
+
+                    if 'port' not in data:
+                        return Response(response='No port specified!', status=400)
+
+                    # remove running instance so we can create an updated version
+                    if serverid in server_instances:
+                        _terminate_process(serverid)
+
+                    # create and add process
+                    server_put = Server(processes=processes, host=data['host'], port=data['port'])
                     process_put = multiprocessing.Process(target=server_put.run)
                     process_put.start()
                     server_instances[serverid] = {'Process': process_put, 'ServerObject': server_put}
-                    return 'Added new server with pid: %s' % (process_put.pid)
+                    return Response(status=201)
                 except:
-                    return 'PUT ERROR'
+                    return Response(status=500)
 
             if request.method == 'DELETE':
                 try:
-                    if serverid not in server_instances:
-                        return 'Error... The specified server id doesn\'t exist'
-
-                    process_delete = server_instances[serverid]['Process']
-                    process_delete.terminate()
-                    process_delete.join()
-                    if process_delete.is_alive():
-                        return 'Error terminating process: %s with pid: %s' % (serverid, process_delete.pid)
-                    del server_instances[serverid]
-                    return 'Deleted server with pid: %s' % (process_delete.pid)
+                    if serverid in server_instances:
+                        _terminate_process()
+                    return Response(status=200)
                 except Exception as e:
-                    return 'DELETE ERROR: %s' % e
+                    return Response(status=500)
 
-            return 'Unsupported Method'
+            return Response(status=405)
+
+        # Terminates a process and removes it from the list
+        def _terminate_process(serverid):
+            process_delete = server_instances[serverid]['Process']
+            process_delete.terminate()
+            process_delete.join()
+            if process_delete.is_alive():
+                return Response(response='Error terminating process: %s with pid: %s' % (serverid, process_delete.pid), status=500)
+            del server_instances[serverid]
 
         rest_app.run(host='0.0.0.0', port=5000)
 

@@ -66,3 +66,7 @@ class Server(PyWPSServerAbstract):
                 flask.abort(404)
 
         self.app.run(host=self.host, port=self.port, debug=self.debug)
+
+    def shut_down(self):
+        func = request.environ.get('werkzeug.server.shutdown')
+        func()

@@ -41,6 +41,12 @@ class Server(PyWPSServerAbstract):
         self.processes = processes
         self.service = Service(processes=self.processes)
 
+    def get_configuration(self):
+        return configuration.config
+
+    def set_configuration(self, config):
+        configuration.config = config
+
     def run(self):
         @self.app.route('/')
         def index():
@@ -64,5 +70,10 @@ class Server(PyWPSServerAbstract):
                     return flask.Response(file_bytes, content_type=mime_type)
             else:
                 flask.abort(404)
+
+        @self.app.route('/rest',  methods=['GET', 'POST'])
+        def rest(get):
+            #TODO: use service like for rest requests
+            return flask.Response("REST INTERFACE"+get)
 
         self.app.run(host=self.host, port=self.port, debug=self.debug)

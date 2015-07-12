@@ -4,10 +4,9 @@ import multiprocessing
 import os
 import sys
 from flask import request
-
-# CAUTION! This line is only used for a development environment, when pywps is not installed
 from werkzeug.wrappers import Response
 
+# CAUTION! This line is only used for a development environment, when pywps is not installed
 sys.path.append(os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
     os.path.pardir))
@@ -29,6 +28,7 @@ def main():
     parser.add_argument('-w', '--waitress', action='store_true')
     args = parser.parse_args()
 
+    # TODO: the config file should be "global" to a single server instance and not across all
     config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "pywps.cfg")
 
     processes = [
@@ -53,8 +53,7 @@ def main():
     for s in server_list:
         p = multiprocessing.Process(target=s.run)
         p.start()
-        server_instances[counter] = {'Process': p, 'ServerObject': s}
-        counter += 1
+        server_instances[p.pid] = {'Process': p, 'ServerObject': s}
 
     if args.waitress:
         # TODO: make waitress use multiprocessing
@@ -69,6 +68,67 @@ def main():
         #waitress.serve(s.app, host=host, port=port)
     else:
         rest_app = flask.Flask(__name__)
+
+        @rest_app.route('/rest/configuration', methods=['GET', 'POST'])
+        def rest_configuration():
+            js = {}
+            for s in server_instances:
+                process = server_instances[s]['Process']
+                server = server_instances[s]['ServerObject']
+                json_server = {}
+                config = server.get_configuration()
+                for section in config.sections():
+                    for (key, val) in config.items(section):
+                        json_server[key] = val
+                js[process.pid] = json_server
+            response = flask.jsonify(js)
+            response.status_code = 200
+            return response
+
+        @rest_app.route('/rest/configuration/<int:serverid>', methods=['GET', 'PUT'])
+        def rest_config(serverid):
+            if request.method == 'GET':
+                try:
+                    process = server_instances[serverid]['Process']
+                    server = server_instances[serverid]['ServerObject']
+                    json_server = {}
+                    config = server.get_configuration()
+                    for section in config.sections():
+                        for (key, val) in config.items(section):
+                            json_server[key] = val
+                    response = flask.jsonify(json_server)
+                    response.status_code = 200
+                    return response
+                except:
+                    return Response(status=500)
+            elif request.method == 'PUT':
+                try:
+                    # only parse json and if Header Content-Type is application/json
+                    data = request.get_json()
+
+                    #  TODO: check if configuration key is valid
+
+                    server = server_instances[serverid]['ServerObject']
+                    config = server.get_configuration()
+
+                    for section in config.sections():
+                        for (key, val) in config.items(section):
+                            if key in data:
+                                config.set(section, key, data[key])
+
+                    # remove running instance so we can create an updated version
+                    if serverid in server_instances:
+                        _terminate_process(serverid)
+
+                    # create and add process
+                    server_put = Server(processes=processes)
+                    server_put.set_configuration(config)
+                    process_put = multiprocessing.Process(target=server_put.run)
+                    process_put.start()
+                    server_instances[serverid] = {'Process': process_put, 'ServerObject': server_put}
+                    return Response(status=201)
+                except:
+                    return Response(status=500)
 
         @rest_app.route('/rest/server', methods=['GET', 'POST'])
         def rest_servers():

@@ -31,7 +31,7 @@ def main():
         try:
             pid = os.fork()
         except OSError as e:
-             raise Exception, "%s [%d]" % (e.strerror, e.errno)
+             raise Exception("%s [%d]" % (e.strerror, e.errno))
 
         if (pid == 0):
             os.setsid()

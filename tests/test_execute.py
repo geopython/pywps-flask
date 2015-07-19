@@ -1,21 +1,29 @@
+"""Test various processes
+"""
 import unittest
-import lxml.etree as etree
-import urllib
-import subprocess
 
 from tests.common import validate, URL
 
 class SayHello(unittest.TestCase):
+    """Test sayhello process
+    """
 
     def setUp(self):
 
-        self.url = URL + '?service=wps&request=execute&identifier=say_hello&version=1.0.0&datainputs=name=ahoj'
         self.schema_url = 'http://schemas.opengis.net/wps/1.0.0/wpsExecute_response.xsd'
 
 
     def test_valid(self):
+        "GET Execute request"
 
-        assert validate(self.url, self.schema_url)
+        url = URL + '?service=wps&request=execute&identifier=say_hello&version=1.0.0&datainputs=name=ahoj'
+        assert validate(url, self.schema_url)
+
+    def test_valid_lineage(self):
+        "GET Execute request, lineage=true"
+
+        url = URL + '?service=wps&request=execute&identifier=say_hello&version=1.0.0&datainputs=name=ahoj&lineage=true'
+        assert validate(url, self.schema_url)
 
 def load_tests(loader=None, tests=None, pattern=None):
     if not loader:

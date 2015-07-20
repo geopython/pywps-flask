@@ -1,15 +1,21 @@
 #!/usr/bin/env python
-import flask
-import multiprocessing
 import os
 import sys
-from flask import request
-from werkzeug.wrappers import Response
-
 # CAUTION! This line is only used for a development environment, when pywps is not installed
 sys.path.append(os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
     os.path.pardir))
+
+import flask
+import multiprocessing
+from flask import request
+from werkzeug.wrappers import Response
+import pywps
+from pywps._compat import PY2
+if PY2:
+    import ConfigParser
+else:
+    import configparser
 
 from server import Server
 from processes.sleep import Sleep
@@ -78,14 +84,15 @@ def main():
                 json_server = {}
                 config = server.get_configuration()
                 for section in config.sections():
-                    for (key, val) in config.items(section):
-                        json_server[key] = val
+                        json_server[section] = {}
+                        for (key, val) in config.items(section):
+                            json_server[section][key] = val
                 js[process.pid] = json_server
             response = flask.jsonify(js)
             response.status_code = 200
             return response
 
-        @rest_app.route('/rest/configuration/<int:serverid>', methods=['GET', 'PUT'])
+        @rest_app.route('/rest/configuration/<int:serverid>', methods=['GET', 'PUT', 'POST'])
         def rest_config(serverid):
             if request.method == 'GET':
                 try:
@@ -94,8 +101,9 @@ def main():
                     json_server = {}
                     config = server.get_configuration()
                     for section in config.sections():
+                        json_server[section] = {}
                         for (key, val) in config.items(section):
-                            json_server[key] = val
+                            json_server[section][key] = val
                     response = flask.jsonify(json_server)
                     response.status_code = 200
                     return response
@@ -128,6 +136,37 @@ def main():
                     server_instances[serverid] = {'Process': process_put, 'ServerObject': server_put}
                     return Response(status=201)
                 except:
+                    return Response(status=500)
+            elif request.method == 'POST':
+                try:
+                    # only parse json and if Header Content-Type is application/json
+                    data = request.get_json()
+
+                    #  TODO: check if configuration key is valid
+
+                    server = server_instances[serverid]['ServerObject']
+                    config = server.get_configuration()
+
+                    if PY2:
+                        config = ConfigParser.SafeConfigParser()
+                    else:
+                        config = configparser.SafeConfigParser()
+
+                    dict_to_config(config, None, data)
+
+                    # remove running instance so we can create an updated version
+                    if serverid in server_instances:
+                        _terminate_process(serverid)
+
+                    # create and add process
+                    server_put = Server(processes=processes)
+                    server_put.set_configuration(config)
+                    process_put = multiprocessing.Process(target=server_put.run)
+                    process_put.start()
+                    server_instances[serverid] = {'Process': process_put, 'ServerObject': server_put}
+                    return Response(status=201)
+                except Exception as e:
+                    print(e)
                     return Response(status=500)
 
         @rest_app.route('/rest/server', methods=['GET', 'POST'])
@@ -205,6 +244,15 @@ def main():
             if process_delete.is_alive():
                 return Response(response='Error terminating process: %s with pid: %s' % (serverid, process_delete.pid), status=500)
             del server_instances[serverid]
+
+        def dict_to_config(config, section, d):
+            for k, v in d.iteritems():
+                if isinstance(v, dict):
+                    section = k
+                    config.add_section(section)
+                    dict_to_config(config, section, v)
+                else:
+                    config.set(section, k, v)
 
         rest_app.run(host='0.0.0.0', port=5000)
 

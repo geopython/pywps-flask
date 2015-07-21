@@ -10,7 +10,6 @@
       <gml:coord><gml:X>0.04853540200402788</gml:X><gml:Y>0.01369376726825339</gml:Y></gml:coord>
     </gml:Box>
   </gml:boundedBy>
-                                                                                        
   <gml:featureMember>
     <ogr:point fid="point.0">
       <ogr:geometryProperty><gml:Point><gml:coordinates>0.048535402004028,0.013693767268253</gml:coordinates></gml:Point></ogr:geometryProperty>

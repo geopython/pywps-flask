@@ -8,14 +8,14 @@ URL = 'http://localhost:5000/wps'
 if not PY2:
     import urllib.request
 
-def get_response(url):
+def get_response(url, post_data=None):
 
     response = None
 
     if PY2:
-        response = urllib.urlopen(url)
+        response = urllib.urlopen(url, data=post_data)
     else:
-        response = urllib.request.urlopen(url)
+        response = urllib.request.urlopen(url, data=post_data)
 
     return response
 
@@ -31,8 +31,8 @@ def validate_file(path, schema):
     schema = get_schema(schema)
     return schema.validate(body_doc)
 
-def validate(url, schema):
-    response = get_response(url)
+def validate(url, schema, post_data=None):
+    response = get_response(url, post_data)
     info = response.info()
     body = response.read()
     body_doc = etree.fromstring(body)

@@ -15,6 +15,7 @@ from processes.sayhello import SayHello
 from processes.feature_count import FeatureCount
 from processes.buffer import Buffer
 from processes.area import Area
+from processes.bboxinout import Box
 
 
 def main():
@@ -22,8 +23,26 @@ def main():
 
     parser = argparse.ArgumentParser()
     parser.add_argument('-w', '--waitress', action='store_true')
+    parser.add_argument('-d', '--daemon', action='store_true')
     args = parser.parse_args()
 
+    if args.daemon:
+        pid = None
+        try:
+            pid = os.fork()
+        except OSError as e:
+             raise Exception("%s [%d]" % (e.strerror, e.errno))
+
+        if (pid == 0):
+            os.setsid()
+            start(args)
+        else:
+            os._exit(0)
+
+    else:
+        start(args)
+
+def start(args, kill = None):
     config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "pywps.cfg")
 
     processes = [
@@ -33,7 +52,8 @@ def main():
         UltimateQuestion(),
         Sleep(),
         Buffer(),
-        Area()
+        Area(),
+        Box()
     ]
 
     s = Server(processes=processes, config_file=config_file)

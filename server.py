@@ -71,9 +71,4 @@ class Server(PyWPSServerAbstract):
             else:
                 flask.abort(404)
 
-        @self.app.route('/rest',  methods=['GET', 'POST'])
-        def rest(get):
-            #TODO: use service like for rest requests
-            return flask.Response("REST INTERFACE"+get)
-
         self.app.run(host=self.host, port=self.port, debug=self.debug)

@@ -1,21 +1,16 @@
 #!/usr/bin/env python
+import flask
+import multiprocessing
 import os
+import psutil
 import sys
+from flask import request
+from werkzeug.wrappers import Response
+
 # CAUTION! This line is only used for a development environment, when pywps is not installed
 sys.path.append(os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
     os.path.pardir))
-
-import flask
-import multiprocessing
-from flask import request
-from werkzeug.wrappers import Response
-import pywps
-from pywps._compat import PY2
-if PY2:
-    import ConfigParser
-else:
-    import configparser
 
 from server import Server
 from processes.sleep import Sleep
@@ -34,8 +29,11 @@ def main():
     parser.add_argument('-w', '--waitress', action='store_true')
     args = parser.parse_args()
 
+    from pywps import configuration
     # TODO: the config file should be "global" to a single server instance and not across all
     config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "pywps.cfg")
+    configuration.load_configuration(config_file)
+    rest_url = '/wpsadmin'
 
     processes = [
         FeatureCount(),
@@ -55,7 +53,6 @@ def main():
 
     # List of server instances running
     server_instances = {}
-    counter = 0
     for s in server_list:
         p = multiprocessing.Process(target=s.run)
         p.start()
@@ -65,9 +62,7 @@ def main():
         # TODO: make waitress use multiprocessing
         pass
         import waitress
-        from pywps import configuration
 
-        configuration.load_configuration(config_file)
         host = configuration.get_config_value('wps', 'serveraddress').split('://')[1]
         port = int(configuration.get_config_value('wps', 'serverport'))
 
@@ -75,7 +70,40 @@ def main():
     else:
         rest_app = flask.Flask(__name__)
 
-        @rest_app.route('/rest/configuration', methods=['GET', 'POST'])
+        @rest_app.route(rest_url)
+        def rest_index():
+            return flask.Response('REST Interface<br/>'
+                                  'List of REST url:<br/>'
+                                  '<p>...'+rest_url+'/configuration<br/>'
+                                  '<p>&emsp;[GET]<br/>&emsp;Returns a list of all server instance configuration'
+                                  '</p>'
+
+                                  '<p>...'+rest_url+'/configuration/&#60int:serverid&#62<br/>'
+                                  '<p>&emsp;[GET]<br/>&emsp; Returns the configuration of serverid server instance</p>'
+                                  '<p>&emsp;[PUT]<br/>&emsp; Changes specific configuration of serverid server instance.'
+                                  ' (Passed data must be JSON formatted and submitted with Header Content-Type application/json)</p>'
+                                  '</p>'
+                                  '<p>...'+rest_url+'/server<br/>'
+                                  '<p>&emsp;[GET]<br/>&emsp; Returns a list of server instances containing information about the host, port, pid and process status</p>'
+                                  '</p>'
+
+                                  '<p>...'+rest_url+'/server/&#60int:serverid&#62<br/>'
+                                  '<p>&emsp;[GET]<br/>&emsp; Returns the host, port, pid and process status of serverid server instance.</p>'
+                                  '<p>&emsp;[PUT]<br/>&emsp; Creates and starts a new serverid server instances specified by the passed data.'
+                                  ' (Passed data must be JSON formatted and submitted with Header Content-Type application/json)</p>'
+                                  '<p>&emsp;[DELETE]<br/>&emsp; Stops and removes serverid server instances from currently available server instances.</p>'
+                                  '</p>'
+
+                                  '<p>...'+rest_url+'/server/&#60int:serverid&#62/pause<br/>'
+                                  '<p>&emsp;[GET]<br/>&emsp; Pauses the server instance specified by serverid.</p>'
+                                  '</p>'
+
+                                  '<p>...'+rest_url+'/server/&#60int:serverid&#62/resume<br/>'
+                                  '<p>&emsp;[GET]<br/>&emsp; Resumes the server instance specified by serverid.</p>'
+                                  '</p>'
+                                  )
+
+        @rest_app.route(rest_url+'/configuration', methods=['GET'])
         def rest_configuration():
             js = {}
             for s in server_instances:
@@ -84,15 +112,14 @@ def main():
                 json_server = {}
                 config = server.get_configuration()
                 for section in config.sections():
-                        json_server[section] = {}
-                        for (key, val) in config.items(section):
-                            json_server[section][key] = val
+                    for (key, val) in config.items(section):
+                        json_server[key] = val
                 js[process.pid] = json_server
             response = flask.jsonify(js)
             response.status_code = 200
             return response
 
-        @rest_app.route('/rest/configuration/<int:serverid>', methods=['GET', 'PUT', 'POST'])
+        @rest_app.route(rest_url+'/configuration/<int:serverid>', methods=['GET', 'PUT'])
         def rest_config(serverid):
             if request.method == 'GET':
                 try:
@@ -101,9 +128,8 @@ def main():
                     json_server = {}
                     config = server.get_configuration()
                     for section in config.sections():
-                        json_server[section] = {}
                         for (key, val) in config.items(section):
-                            json_server[section][key] = val
+                            json_server[key] = val
                     response = flask.jsonify(json_server)
                     response.status_code = 200
                     return response
@@ -137,65 +163,68 @@ def main():
                     return Response(status=201)
                 except:
                     return Response(status=500)
-            elif request.method == 'POST':
+
+        @rest_app.route(rest_url+'/server/<int:serverid>/pause', methods=['GET'])
+        def rest_stop_server(serverid):
+            if request.method == 'GET':
                 try:
-                    # only parse json and if Header Content-Type is application/json
-                    data = request.get_json()
+                    p = psutil.Process(serverid)
 
-                    #  TODO: check if configuration key is valid
-
-                    server = server_instances[serverid]['ServerObject']
-                    config = server.get_configuration()
-
-                    if PY2:
-                        config = ConfigParser.SafeConfigParser()
+                    if p.status == psutil.STATUS_RUNNING or p.status == psutil.STATUS_SLEEPING:
+                        p.suspend()
+                        return Response('Suspended running Server with PID %s' % serverid, status=200)
                     else:
-                        config = configparser.SafeConfigParser()
-
-                    dict_to_config(config, None, data)
-
-                    # remove running instance so we can create an updated version
-                    if serverid in server_instances:
-                        _terminate_process(serverid)
-
-                    # create and add process
-                    server_put = Server(processes=processes)
-                    server_put.set_configuration(config)
-                    process_put = multiprocessing.Process(target=server_put.run)
-                    process_put.start()
-                    server_instances[serverid] = {'Process': process_put, 'ServerObject': server_put}
-                    return Response(status=201)
-                except Exception as e:
-                    print(e)
+                        return Response('Server with PID %s already suspended' % serverid, status=200)
+                except:
                     return Response(status=500)
 
-        @rest_app.route('/rest/server', methods=['GET', 'POST'])
+        @rest_app.route(rest_url+'/server/<int:serverid>/resume', methods=['GET'])
+        def rest_resume_server(serverid):
+            if request.method == 'GET':
+                try:
+                    p = psutil.Process(serverid)
+
+                    if p.status == psutil.STATUS_STOPPED:
+                        p.resume()
+                        return Response('Resumed suspended Server with PID %s' % serverid, status=200)
+                    else:
+                        return Response('Server with PID %s already resumed' % serverid, status=200)
+                except:
+                    return Response(status=500)
+
+        @rest_app.route(rest_url+'/server', methods=['GET'])
         def rest_servers():
             js = {}
             for s in server_instances:
                 process = server_instances[s]['Process']
                 server = server_instances[s]['ServerObject']
+
+                p = psutil.Process(process.pid)
+
                 json_server = {}
                 json_server['pid'] = process.pid
                 json_server['host'] = server.host
                 json_server['port'] = server.port
-                json_server['alive'] = process.is_alive()
+                json_server['status'] = p.status
                 js[s] = json_server
             response = flask.jsonify(js)
             response.status_code = 200
             return response
 
-        @rest_app.route('/rest/server/<int:serverid>', methods=['GET', 'PUT', 'DELETE'])
+        @rest_app.route(rest_url+'/server/<int:serverid>', methods=['GET', 'PUT', 'DELETE'])
         def rest_server(serverid):
             if request.method == 'GET':
                 try:
                     process = server_instances[serverid]['Process']
                     server = server_instances[serverid]['ServerObject']
+
+                    p = psutil.Process(serverid)
+
                     json_server = {}
                     json_server['pid'] = process.pid
                     json_server['host'] = server.host
                     json_server['port'] = server.port
-                    json_server['alive'] = process.is_alive()
+                    json_server['status'] = p.status
                     response = flask.jsonify(json_server)
                     response.status_code = 200
                     return response
@@ -244,15 +273,6 @@ def main():
             if process_delete.is_alive():
                 return Response(response='Error terminating process: %s with pid: %s' % (serverid, process_delete.pid), status=500)
             del server_instances[serverid]
-
-        def dict_to_config(config, section, d):
-            for k, v in d.iteritems():
-                if isinstance(v, dict):
-                    section = k
-                    config.add_section(section)
-                    dict_to_config(config, section, v)
-                else:
-                    config.set(section, k, v)
 
         rest_app.run(host='0.0.0.0', port=5000)
 

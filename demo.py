@@ -5,6 +5,7 @@ import os
 import psutil
 import sys
 from flask import request
+import shutil
 from werkzeug.wrappers import Response
 
 # CAUTION! This line is only used for a development environment, when pywps is not installed
@@ -70,40 +71,47 @@ def main():
     else:
         rest_app = flask.Flask(__name__)
 
-        @rest_app.route(rest_url)
+        @rest_app.route('/', strict_slashes=False)
+        @rest_app.route(rest_url, strict_slashes=False)
         def rest_index():
-            return flask.Response('REST Interface<br/>'
-                                  'List of REST url:<br/>'
-                                  '<p>...'+rest_url+'/configuration<br/>'
-                                  '<p>&emsp;[GET]<br/>&emsp;Returns a list of all server instance configuration'
-                                  '</p>'
+            rest_url_config = flask.url_for('rest_configuration', _external=True)
+            rest_url_config_id = flask.url_for('rest_configuration_id', server_id=0, _external=True)
+            rest_url_server = flask.url_for('rest_server', _external=True)
+            rest_url_server_id = flask.url_for('rest_server_id', server_id=0, _external=True)
+            rest_url_server_pause = flask.url_for('rest_server_pause', server_id=0, _external=True)
+            rest_url_server_resume = flask.url_for('rest_server_resume', server_id=0, _external=True)
+            rest_url_server_processes = flask.url_for('rest_server_processes', server_id=0, _external=True)
+            rest_url_server_process_id = flask.url_for('rest_server_process_id', server_id=0, process_id=1, _external=True)
+            rest_url_server_process_name = flask.url_for('rest_server_process_name', server_id=0, process_name='1', _external=True)
+            rest_url_pywps_processes = flask.url_for('rest_pywps_processes', _external=True)
+            rest_url_pywps_process = flask.url_for('rest_pywps_process', process_name='0', _external=True)
 
-                                  '<p>...'+rest_url+'/configuration/&#60int:serverid&#62<br/>'
-                                  '<p>&emsp;[GET]<br/>&emsp; Returns the configuration of serverid server instance</p>'
-                                  '<p>&emsp;[PUT]<br/>&emsp; Changes specific configuration of serverid server instance.'
-                                  ' (Passed data must be JSON formatted and submitted with Header Content-Type application/json)</p>'
-                                  '</p>'
-                                  '<p>...'+rest_url+'/server<br/>'
-                                  '<p>&emsp;[GET]<br/>&emsp; Returns a list of server instances containing information about the host, port, pid and process status</p>'
-                                  '</p>'
+            rest_url_config_id = rest_url_config_id.replace('/0', '/<int:server_id>')
+            rest_url_server_id = rest_url_server_id.replace('/0', '/<int:server_id>')
+            rest_url_server_pause = rest_url_server_pause.replace('/0', '/<int:server_id>')
+            rest_url_server_resume = rest_url_server_resume.replace('/0', '/<int:server_id>')
+            rest_url_server_processes = rest_url_server_processes.replace('/0', '/<int:process_id>')
+            rest_url_server_process_id = rest_url_server_process_id.replace('/0', '/<int:server_id>')
+            rest_url_server_process_id = rest_url_server_process_id.replace('/1', '/<int:process_id>')
+            rest_url_server_process_name = rest_url_server_process_name.replace('/0', '/<int:server_id>')
+            rest_url_server_process_name = rest_url_server_process_name.replace('/1', '/<string:process_name>')
+            rest_url_pywps_process = rest_url_pywps_process.replace('/0', '/<string:process_name>')
 
-                                  '<p>...'+rest_url+'/server/&#60int:serverid&#62<br/>'
-                                  '<p>&emsp;[GET]<br/>&emsp; Returns the host, port, pid and process status of serverid server instance.</p>'
-                                  '<p>&emsp;[PUT]<br/>&emsp; Creates and starts a new serverid server instances specified by the passed data.'
-                                  ' (Passed data must be JSON formatted and submitted with Header Content-Type application/json)</p>'
-                                  '<p>&emsp;[DELETE]<br/>&emsp; Stops and removes serverid server instances from currently available server instances.</p>'
-                                  '</p>'
+            return flask.render_template('rest.html',
+                                         rest_url_config=rest_url_config,
+                                         rest_url_config_id=rest_url_config_id,
+                                         rest_url_server=rest_url_server,
+                                         rest_url_server_id=rest_url_server_id,
+                                         rest_url_server_pause=rest_url_server_pause,
+                                         rest_url_server_resume=rest_url_server_resume,
+                                         rest_url_server_processes=rest_url_server_processes,
+                                         rest_url_server_process_id=rest_url_server_process_id,
+                                         rest_url_server_process_name=rest_url_server_process_name,
+                                         rest_url_pywps_processes=rest_url_pywps_processes,
+                                         rest_url_pywps_process=rest_url_pywps_process
+                                         )
 
-                                  '<p>...'+rest_url+'/server/&#60int:serverid&#62/pause<br/>'
-                                  '<p>&emsp;[GET]<br/>&emsp; Pauses the server instance specified by serverid.</p>'
-                                  '</p>'
-
-                                  '<p>...'+rest_url+'/server/&#60int:serverid&#62/resume<br/>'
-                                  '<p>&emsp;[GET]<br/>&emsp; Resumes the server instance specified by serverid.</p>'
-                                  '</p>'
-                                  )
-
-        @rest_app.route(rest_url+'/configuration', methods=['GET'])
+        @rest_app.route(rest_url+'/configuration', methods=['GET'], strict_slashes=False)
         def rest_configuration():
             js = {}
             for s in server_instances:
@@ -119,12 +127,12 @@ def main():
             response.status_code = 200
             return response
 
-        @rest_app.route(rest_url+'/configuration/<int:serverid>', methods=['GET', 'PUT'])
-        def rest_config(serverid):
+        @rest_app.route(rest_url+'/configuration/<int:server_id>', methods=['GET', 'PUT'], strict_slashes=False)
+        def rest_configuration_id(server_id):
             if request.method == 'GET':
                 try:
-                    process = server_instances[serverid]['Process']
-                    server = server_instances[serverid]['ServerObject']
+                    process = server_instances[server_id]['Process']
+                    server = server_instances[server_id]['ServerObject']
                     json_server = {}
                     config = server.get_configuration()
                     for section in config.sections():
@@ -142,7 +150,7 @@ def main():
 
                     #  TODO: check if configuration key is valid
 
-                    server = server_instances[serverid]['ServerObject']
+                    server = server_instances[server_id]['ServerObject']
                     config = server.get_configuration()
 
                     for section in config.sections():
@@ -151,49 +159,21 @@ def main():
                                 config.set(section, key, data[key])
 
                     # remove running instance so we can create an updated version
-                    if serverid in server_instances:
-                        _terminate_process(serverid)
+                    if server_id in server_instances:
+                        _terminate_process(server_id)
 
                     # create and add process
                     server_put = Server(processes=processes)
                     server_put.set_configuration(config)
                     process_put = multiprocessing.Process(target=server_put.run)
                     process_put.start()
-                    server_instances[serverid] = {'Process': process_put, 'ServerObject': server_put}
+                    server_instances[server_id] = {'Process': process_put, 'ServerObject': server_put}
                     return Response(status=201)
                 except:
                     return Response(status=500)
 
-        @rest_app.route(rest_url+'/server/<int:serverid>/pause', methods=['GET'])
-        def rest_stop_server(serverid):
-            if request.method == 'GET':
-                try:
-                    p = psutil.Process(serverid)
-
-                    if p.status == psutil.STATUS_RUNNING or p.status == psutil.STATUS_SLEEPING:
-                        p.suspend()
-                        return Response('Suspended running Server with PID %s' % serverid, status=200)
-                    else:
-                        return Response('Server with PID %s already suspended' % serverid, status=200)
-                except:
-                    return Response(status=500)
-
-        @rest_app.route(rest_url+'/server/<int:serverid>/resume', methods=['GET'])
-        def rest_resume_server(serverid):
-            if request.method == 'GET':
-                try:
-                    p = psutil.Process(serverid)
-
-                    if p.status == psutil.STATUS_STOPPED:
-                        p.resume()
-                        return Response('Resumed suspended Server with PID %s' % serverid, status=200)
-                    else:
-                        return Response('Server with PID %s already resumed' % serverid, status=200)
-                except:
-                    return Response(status=500)
-
-        @rest_app.route(rest_url+'/server', methods=['GET'])
-        def rest_servers():
+        @rest_app.route(rest_url+'/server', methods=['GET'], strict_slashes=False)
+        def rest_server():
             js = {}
             for s in server_instances:
                 process = server_instances[s]['Process']
@@ -211,14 +191,14 @@ def main():
             response.status_code = 200
             return response
 
-        @rest_app.route(rest_url+'/server/<int:serverid>', methods=['GET', 'PUT', 'DELETE'])
-        def rest_server(serverid):
+        @rest_app.route(rest_url+'/server/<int:server_id>', methods=['GET', 'PUT', 'DELETE'], strict_slashes=False)
+        def rest_server_id(server_id):
             if request.method == 'GET':
                 try:
-                    process = server_instances[serverid]['Process']
-                    server = server_instances[serverid]['ServerObject']
+                    process = server_instances[server_id]['Process']
+                    server = server_instances[server_id]['ServerObject']
 
-                    p = psutil.Process(serverid)
+                    p = psutil.Process(server_id)
 
                     json_server = {}
                     json_server['pid'] = process.pid
@@ -243,21 +223,21 @@ def main():
                         return Response(response='No port specified!', status=400)
 
                     # remove running instance so we can create an updated version
-                    if serverid in server_instances:
-                        _terminate_process(serverid)
+                    if server_id in server_instances:
+                        _terminate_process(server_id)
 
                     # create and add process
                     server_put = Server(processes=processes, host=data['host'], port=data['port'])
                     process_put = multiprocessing.Process(target=server_put.run)
                     process_put.start()
-                    server_instances[serverid] = {'Process': process_put, 'ServerObject': server_put}
+                    server_instances[server_id] = {'Process': process_put, 'ServerObject': server_put}
                     return Response(status=201)
                 except:
                     return Response(status=500)
 
             if request.method == 'DELETE':
                 try:
-                    if serverid in server_instances:
+                    if server_id in server_instances:
                         _terminate_process()
                     return Response(status=200)
                 except Exception as e:
@@ -265,14 +245,147 @@ def main():
 
             return Response(status=405)
 
+        @rest_app.route(rest_url+'/server/<int:server_id>/pause', methods=['GET'], strict_slashes=False)
+        def rest_server_pause(server_id):
+            if request.method == 'GET':
+                try:
+                    p = psutil.Process(server_id)
+
+                    if p.status == psutil.STATUS_RUNNING or p.status == psutil.STATUS_SLEEPING:
+                        p.suspend()
+                        return Response('Suspended running Server with PID %s' % server_id, status=200)
+                    else:
+                        return Response('Server with PID %s already suspended' % server_id, status=200)
+                except:
+                    return Response(status=500)
+
+        @rest_app.route(rest_url+'/server/<int:server_id>/resume', methods=['GET'], strict_slashes=False)
+        def rest_server_resume(server_id):
+            if request.method == 'GET':
+                try:
+                    p = psutil.Process(server_id)
+
+                    if p.status == psutil.STATUS_STOPPED:
+                        p.resume()
+                        return Response('Resumed suspended Server with PID %s' % server_id, status=200)
+                    else:
+                        return Response('Server with PID %s already resumed' % server_id, status=200)
+                except:
+                    return Response(status=500)
+
+        @rest_app.route(rest_url+'/server/<int:server_id>/process', methods=['GET', 'DELETE'], strict_slashes=False)
+        def rest_server_processes(server_id):
+            if request.method == 'GET':
+                # TODO: Get list of all the processes activated on the specified server
+                return Response(status=501)
+            elif request.method == 'DELETE':
+                # TODO: Deactivate/Remove all the processes from the specified server
+                return Response(status=501)
+
+        @rest_app.route(rest_url+'/server/<int:server_id>/process/id/<int:process_id>', methods=['DELETE'], strict_slashes=False)
+        def rest_server_process_id(server_id, process_id):
+            if request.method == 'PUT' or request.method == 'POST':
+                # TODO: Activate the specified process for the specified server
+                return Response(status=501)
+            elif request.method == 'DELETE':
+                # TODO: Deactivate/Remove the specified server process
+                return Response(status=501)
+
+        @rest_app.route(rest_url+'/server/<int:server_id>/process/name/<process_name>', methods=['PUT', 'POST', 'DELETE'], strict_slashes=False)
+        def rest_server_process_name(server_id, process_name):
+            if request.method == 'PUT' or request.method == 'POST':
+                # TODO: Activate the specified process for the specified server
+                return Response(status=501)
+            elif request.method == 'DELETE':
+                # TODO: Deactivate/Remove the specified server process
+                return Response(status=501)
+
+        @rest_app.route(rest_url+'/server/process', methods=['GET', 'DELETE'], strict_slashes=False)
+        def rest_pywps_processes():
+            if request.method == 'GET':
+                try:
+                    json_server = {}
+                    json_server['processes'] = {}
+
+                    process_dir = os.listdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'processes'))
+
+                    i = 0
+                    for f in process_dir:
+                        if f.endswith('.py') and f.lower() != '__init__.py':
+                            json_server['processes'][i] = f
+                            i += 1
+                    response = flask.jsonify(json_server)
+                    response.status_code = 200
+                    return response
+                except:
+                    return Response(status=500)
+            elif request.method == 'DELETE':
+                try:
+                    process_dir = os.listdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'processes'))
+
+                    for f in process_dir:
+                        if os.path.exists(f):
+                            os.remove(f)
+                    return Response(status=200)
+                except:
+                    return Response(status=500)
+
+        @rest_app.route(rest_url+'/server/process/<string:process_name>', methods=['GET', 'PUT', 'POST', 'DELETE'], strict_slashes=False)
+        def rest_pywps_process(process_name):
+            if request.method == 'GET':
+                try:
+                    process_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'processes')
+                    process_file = os.path.join(process_dir, process_name)
+                    with open(process_file, 'r') as f:
+                        data = f.read()
+
+                    return Response(data, status=200)
+                except:
+                    return Response(status=500)
+            elif request.method == 'PUT':
+                try:
+                    data = request.data
+                    process_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'processes')
+                    process_file = os.path.join(process_dir, process_name)
+                    if os.path.exists(process_file):
+                        with open(process_file, 'w') as f:
+                            f.write(data)
+                    else:
+                        return Response('No such process: %s' % process_name, status=500)
+
+                    return Response(status=201)
+                except:
+                    return Response(status=500)
+            elif request.method == 'POST':
+                try:
+                    data = request.data
+                    process_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'processes')
+                    process_file = os.path.join(process_dir, process_name)
+                    with open(process_file, 'w') as f:
+                        f.write(data)
+
+                    return Response(status=201)
+                except:
+                    return Response(status=500)
+            elif request.method == 'DELETE':
+                try:
+                    process_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'processes')
+                    process_file = os.path.join(process_dir, process_name)
+
+                    if os.path.exists(process_file):
+                        os.remove(process_file)
+                    return Response(status=200)
+                except:
+                    return Response(status=500)
+
         # Terminates a process and removes it from the list
-        def _terminate_process(serverid):
-            process_delete = server_instances[serverid]['Process']
+        def _terminate_process(server_id):
+            process_delete = server_instances[server_id]['Process']
             process_delete.terminate()
             process_delete.join()
             if process_delete.is_alive():
-                return Response(response='Error terminating process: %s with pid: %s' % (serverid, process_delete.pid), status=500)
-            del server_instances[serverid]
+                return Response(response='Error terminating process: %s with pid: %s' % (server_id, process_delete.pid), status=500)
+            del server_instances[server_id]
 
         rest_app.run(host='0.0.0.0', port=5000)
 

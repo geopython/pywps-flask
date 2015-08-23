@@ -41,12 +41,6 @@ class Server(PyWPSServerAbstract):
         self.processes = processes
         self.service = Service(processes=self.processes)
 
-    def get_configuration(self):
-        return configuration.config
-
-    def set_configuration(self, config):
-        configuration.config = config
-
     def run(self):
         @self.app.route('/')
         def index():

@@ -71,6 +71,7 @@ def main():
     else:
         rest_app = flask.Flask(__name__)
 
+        # REST INDEX
         @rest_app.route('/', strict_slashes=False)
         @rest_app.route(rest_url, strict_slashes=False)
         def rest_index():
@@ -111,6 +112,7 @@ def main():
                                          rest_url_pywps_process=rest_url_pywps_process
                                          )
 
+        # REST get all server configuration
         @rest_app.route(rest_url+'/configuration', methods=['GET'], strict_slashes=False)
         def rest_configuration():
             js = {}
@@ -127,6 +129,7 @@ def main():
             response.status_code = 200
             return response
 
+        # REST specific server configuration
         @rest_app.route(rest_url+'/configuration/<int:server_id>', methods=['GET', 'PUT'], strict_slashes=False)
         def rest_configuration_id(server_id):
             if request.method == 'GET':
@@ -172,6 +175,7 @@ def main():
                 except:
                     return Response(status=500)
 
+        # REST get all server information
         @rest_app.route(rest_url+'/server', methods=['GET'], strict_slashes=False)
         def rest_server():
             js = {}
@@ -191,6 +195,7 @@ def main():
             response.status_code = 200
             return response
 
+        # REST specific server information
         @rest_app.route(rest_url+'/server/<int:server_id>', methods=['GET', 'PUT', 'DELETE'], strict_slashes=False)
         def rest_server_id(server_id):
             if request.method == 'GET':
@@ -245,6 +250,7 @@ def main():
 
             return Response(status=405)
 
+        # REST pause a specific server
         @rest_app.route(rest_url+'/server/<int:server_id>/pause', methods=['GET'], strict_slashes=False)
         def rest_server_pause(server_id):
             if request.method == 'GET':
@@ -259,6 +265,7 @@ def main():
                 except:
                     return Response(status=500)
 
+        # REST resume a specific server
         @rest_app.route(rest_url+'/server/<int:server_id>/resume', methods=['GET'], strict_slashes=False)
         def rest_server_resume(server_id):
             if request.method == 'GET':
@@ -273,6 +280,7 @@ def main():
                 except:
                     return Response(status=500)
 
+        # REST get and delete pywps processes of a specific server
         @rest_app.route(rest_url+'/server/<int:server_id>/process', methods=['GET', 'DELETE'], strict_slashes=False)
         def rest_server_processes(server_id):
             if request.method == 'GET':
@@ -282,6 +290,7 @@ def main():
                 # TODO: Deactivate/Remove all the processes from the specified server
                 return Response(status=501)
 
+        # REST activate and deactivate a specific process of a specific server with the process ID
         @rest_app.route(rest_url+'/server/<int:server_id>/process/id/<int:process_id>', methods=['DELETE'], strict_slashes=False)
         def rest_server_process_id(server_id, process_id):
             if request.method == 'PUT' or request.method == 'POST':
@@ -291,6 +300,7 @@ def main():
                 # TODO: Deactivate/Remove the specified server process
                 return Response(status=501)
 
+        # REST activate or deactivate a specific process of a specific server with the process name
         @rest_app.route(rest_url+'/server/<int:server_id>/process/name/<process_name>', methods=['PUT', 'POST', 'DELETE'], strict_slashes=False)
         def rest_server_process_name(server_id, process_name):
             if request.method == 'PUT' or request.method == 'POST':
@@ -300,6 +310,7 @@ def main():
                 # TODO: Deactivate/Remove the specified server process
                 return Response(status=501)
 
+        # REST get all the pywps processes available inside the process folder and delete all available processes completely
         @rest_app.route(rest_url+'/server/process', methods=['GET', 'DELETE'], strict_slashes=False)
         def rest_pywps_processes():
             if request.method == 'GET':
@@ -330,6 +341,7 @@ def main():
                 except:
                     return Response(status=500)
 
+        # REST get, add, update and delete a pywps process specified by its file name
         @rest_app.route(rest_url+'/server/process/<string:process_name>', methods=['GET', 'PUT', 'POST', 'DELETE'], strict_slashes=False)
         def rest_pywps_process(process_name):
             if request.method == 'GET':

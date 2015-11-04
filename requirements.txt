@@ -6,4 +6,4 @@ MarkupSafe==0.18
 Unipath==1.1
 Shapely==1.5.7
 Werkzeug==0.10.4
-psutil==3.2.2
+psutil

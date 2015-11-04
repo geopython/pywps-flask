@@ -1,7 +1,7 @@
 PyWPS-4 demo application
 ========================
 
-.. figure:: https://travis-ci.org/jachym/pywps-4-demo.svg
+.. figure:: https://travis-ci.org/PyWPS/pywps-4-demo.svg
 
     https://travis-ci.org/jachym/pywps-4-demo
 

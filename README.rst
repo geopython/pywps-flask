@@ -3,7 +3,7 @@ PyWPS-4 demo application
 
 .. figure:: https://travis-ci.org/PyWPS/pywps-4-demo.svg
 
-    https://travis-ci.org/jachym/pywps-4-demo
+    https://travis-ci.org/PyWPS/pywps-4-demo
 
 This is a simple demo app written using PyWPS 4. It has been tested with
 QGIS 1.8.

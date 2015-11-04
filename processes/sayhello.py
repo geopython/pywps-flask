@@ -18,6 +18,6 @@ class SayHello(Process):
         )
 
     def _handler(self, request, response):
-        response.outputs['response'].data = 'Hello ' + request.inputs['name'].data
+        response.outputs['response'].data = 'Hello ' + request.inputs['name'][0].data
         response.outputs['response'].uom = UOM('unity')
         return response

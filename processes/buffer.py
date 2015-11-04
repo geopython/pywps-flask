@@ -8,10 +8,12 @@ from pywps import Process, LiteralInput, ComplexInput, ComplexOutput, Format, FO
 
 class Buffer(Process):
     def __init__(self):
-        inputs = [ComplexInput('poly_in', 'Input1', [Format('GML')]),
+        inputs = [ComplexInput('poly_in', 'Input1',
+            supported_formats=[Format('application/gml+xml')]),
                   LiteralInput('buffer', 'Buffer', data_type='float')
                   ]
-        outputs = [ComplexOutput('buff_out', 'Buffered', [Format('GML')])]
+        outputs = [ComplexOutput('buff_out', 'Buffered',
+            supported_formats=[Format('application/gml+xml')])]
 
         super(Buffer, self).__init__(
             self._handler,

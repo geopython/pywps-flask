@@ -9,7 +9,7 @@ from pywps.wpsserver import temp_dir
 
 class Area(Process):
     def __init__(self):
-        inputs = [ComplexInput('layer', 'Layer', [Format('GML')])]
+        inputs = [ComplexInput('layer', 'Layer', [Format('application/gml+xml')])]
         outputs = [LiteralOutput('area', 'Area', data_type='string')]
 
         super(Area, self).__init__(

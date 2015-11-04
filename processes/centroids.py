@@ -7,8 +7,10 @@ from pywps.wpsserver import temp_dir
 
 class Centroids(Process):
     def __init__(self):
-        inputs = [ComplexInput('layer', 'Layer', [Format('GML')])]
-        outputs = [ComplexOutput('out', 'Referenced Output', [Format('JSON')])]
+        inputs = [ComplexInput('layer', 'Layer',
+            supported_formats=[Format('application/gml+xml')])]
+        outputs = [ComplexOutput('out', 'Referenced Output',
+            supported_formats=[Format('application/json')])]
 
         super(Centroids, self).__init__(
             self._handler,

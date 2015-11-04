@@ -3,7 +3,7 @@ import sys
 import urllib
 PY2 = sys.version_info[0] == 2
 
-URL = 'http://localhost:5000/wps'
+URL = 'http://localhost:5002/wps'
 
 if not PY2:
     import urllib.request
@@ -32,6 +32,8 @@ def validate_file(path, schema):
     return schema.validate(body_doc)
 
 def validate(url, schema, post_data=None):
+    print(url)
+    print(post_data)
     response = get_response(url, post_data)
     info = response.info()
     body = response.read()

@@ -4,14 +4,17 @@ import tempfile
 __author__ = 'Brauni'
 
 from pywps import Process, LiteralInput, ComplexInput, ComplexOutput, Format, FORMATS
+from pywps.validator.complexvalidator import validategml
+
+from pywps.validator.mode import MODE
 
 
 class Buffer(Process):
     def __init__(self):
         inputs = [ComplexInput('poly_in', 'Input1',
-                  supported_formats=[Format('application/gml+xml')]),
-                  LiteralInput('buffer', 'Buffer', data_type='float')
-                  ]
+                  supported_formats=[Format('application/gml+xml')],
+                  mode=MODE.STRICT),
+                  LiteralInput('buffer', 'Buffer', data_type='float')]
         outputs = [ComplexOutput('buff_out', 'Buffered',
             supported_formats=[Format('application/gml+xml')])]
 

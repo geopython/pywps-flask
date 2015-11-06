@@ -56,6 +56,7 @@ def start(args, kill = None):
     configuration.load_configuration(config_file)
     rest_url = '/wpsadmin'
 
+
     processes = [
         FeatureCount(),
         SayHello(),

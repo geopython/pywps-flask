@@ -9,7 +9,7 @@ from pywps import Process, LiteralInput, ComplexInput, ComplexOutput, Format, FO
 class Buffer(Process):
     def __init__(self):
         inputs = [ComplexInput('poly_in', 'Input1',
-            supported_formats=[Format('application/gml+xml')]),
+                  supported_formats=[Format('application/gml+xml')]),
                   LiteralInput('buffer', 'Buffer', data_type='float')
                   ]
         outputs = [ComplexOutput('buff_out', 'Buffered',
@@ -33,7 +33,7 @@ class Buffer(Process):
     def _handler(self, request, response):
         from osgeo import ogr
 
-        inSource = ogr.Open(request.inputs['poly_in'].file)
+        inSource = ogr.Open(request.inputs['poly_in'][0].file)
 
         inLayer = inSource.GetLayer()
         out = inLayer.GetName()
@@ -55,7 +55,7 @@ class Buffer(Process):
             inGeometry = inFeature.GetGeometryRef()
 
             # make the buffer
-            buff = inGeometry.Buffer(float(request.inputs['buffer'].data))
+            buff = inGeometry.Buffer(float(request.inputs['buffer'][0].data))
 
             # create output feature to the file
             outFeature = ogr.Feature(feature_def=outLayer.GetLayerDefn())
@@ -65,10 +65,12 @@ class Buffer(Process):
             index += 1
 
             time.sleep(1)  # making things little bit slower
-            response.update_status("Calculating buffer for feature %d from %d" % (index + 1, featureCount),
-                                   (100 * (index + 1) / featureCount * 1))
+            response.update_status("ahoj", 10)
+            #response.update_status(
+            #        "Calculating buffer for feature %s from %s" % (index + 1, featureCount),
+            #        (100 * (index + 0.001) / featureCount))
 
-        response.outputs['buff_out'].output_format = Format(FORMATS['GML'])
+        response.outputs['buff_out'].output_format = FORMATS.GML
         response.outputs['buff_out'].file = outPath
 
         return response

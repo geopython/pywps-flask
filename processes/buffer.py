@@ -14,7 +14,8 @@ class Buffer(Process):
         inputs = [ComplexInput('poly_in', 'Input1',
                   supported_formats=[Format('application/gml+xml')],
                   mode=MODE.STRICT),
-                  LiteralInput('buffer', 'Buffer', data_type='float')]
+                  LiteralInput('buffer', 'Buffer', data_type='float',
+                  allowed_values=(0, 1, 10, (10, 10, 100), (100, 100, 1000)))]
         outputs = [ComplexOutput('buff_out', 'Buffered',
             supported_formats=[Format('application/gml+xml')])]
 

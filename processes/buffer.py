@@ -26,7 +26,6 @@ class Buffer(Process):
             title="Brauni's 1st process",
             abstract='This process is the best ever being coded',
             profile='',
-            wsdl='',
             metadata=['Process', '1st', 'Hilarious'],
             inputs=inputs,
             outputs=outputs,

@@ -13,7 +13,6 @@ class Sleep(Process):
             title='Sleep Process',
             abstract='This process will sleep for a given delay or 10 seconds if not a valid value',
             profile='',
-            wsdl='',
             metadata=['Sleep', 'Wait', 'Delay'],
             inputs=inputs,
             outputs=outputs,
@@ -24,7 +23,7 @@ class Sleep(Process):
     def _handler(self, request, response):
         import time
 
-        sleep_delay = request.inputs['delay'].data
+        sleep_delay = request.inputs['delay'][0].data
         if sleep_delay:
             sleep_delay = float(sleep_delay)
         else:

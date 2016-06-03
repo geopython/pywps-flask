@@ -13,8 +13,10 @@ class Server(PyWPSServerAbstract):
         # Load config files and override settings if any file specified
         if config_file:
             configuration.load_configuration(config_file)
-            self.host = configuration.get_config_value('wps', 'serveraddress').split('://')[1]
-            self.port = int(configuration.get_config_value('wps', 'serverport'))
+            self.host = configuration.get_config_value('server', 'url').split('://')[1]
+            self.port = configuration.get_config_value('server', 'port')
+            if self.port:
+                self.port = int(self.port)
 
         # Override config host and port if they are passed to the constructor
         if host:
@@ -23,9 +25,9 @@ class Server(PyWPSServerAbstract):
             self.port = port
         self.debug = debug
 
-        self.output_url = configuration.get_config_value('server', 'outputUrl')
-        self.output_path = configuration.get_config_value('server', 'outputPath')
-        self.temp_path = configuration.get_config_value('server', 'tempPath')
+        self.output_url = configuration.get_config_value('server', 'outputurl')
+        self.output_path = configuration.get_config_value('server', 'outputpath')
+        self.temp_path = configuration.get_config_value('server', 'workdir')
 
         # check if in the configuration file specified directory exists otherwise create it
         try:

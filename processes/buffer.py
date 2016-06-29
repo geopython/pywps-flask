@@ -1,6 +1,3 @@
-import os
-import tempfile
-
 __author__ = 'Brauni'
 
 from pywps import Process, LiteralInput, ComplexInput, ComplexOutput, Format, FORMATS
@@ -11,22 +8,21 @@ from pywps.validator.mode import MODE
 
 class Buffer(Process):
     def __init__(self):
-        inputs = [ComplexInput('poly_in', 'Input1',
+        inputs = [ComplexInput('poly_in', 'Input vector file',
                   supported_formats=[Format('application/gml+xml')],
                   mode=MODE.STRICT),
-                  LiteralInput('buffer', 'Buffer', data_type='float',
+                  LiteralInput('buffer', 'Buffer size', data_type='float',
                   allowed_values=(0, 1, 10, (10, 10, 100), (100, 100, 1000)))]
-        outputs = [ComplexOutput('buff_out', 'Buffered',
+        outputs = [ComplexOutput('buff_out', 'Buffered file',
             supported_formats=[Format('application/gml+xml')])]
 
         super(Buffer, self).__init__(
             self._handler,
             identifier='buffer',
             version='0.1',
-            title="Brauni's 1st process",
-            abstract='This process is the best ever being coded',
+            title="GDAL Buffer process",
+            abstract='This process provides standard buffer function using GDAL library',
             profile='',
-            metadata=['Process', '1st', 'Hilarious'],
             inputs=inputs,
             outputs=outputs,
             store_supported=True,
@@ -40,17 +36,15 @@ class Buffer(Process):
 
         inLayer = inSource.GetLayer()
         out = inLayer.GetName()
-        outPath = os.path.join(tempfile.gettempdir(), out)
 
         # create output file
         driver = ogr.GetDriverByName('GML')
-        outSource = driver.CreateDataSource(outPath, ["XSISCHEMAURI=http://schemas.opengis.net/gml/2.1.2/feature.xsd"])
+        outSource = driver.CreateDataSource(out, ["XSISCHEMAURI=http://schemas.opengis.net/gml/2.1.2/feature.xsd"])
         outLayer = outSource.CreateLayer(out, None, ogr.wkbUnknown)
 
         # for each feature
         featureCount = inLayer.GetFeatureCount()
         index = 0
-        import time
 
         while index < featureCount:
             # get the geometry
@@ -67,14 +61,10 @@ class Buffer(Process):
             outFeature.Destroy()  # makes it crash when using debug
             index += 1
 
-            time.sleep(1)  # making things little bit slower
             response.update_status("ahoj", 10)
-            #response.update_status(
-            #        "Calculating buffer for feature %s from %s" % (index + 1, featureCount),
-            #        (100 * (index + 0.001) / featureCount))
 
         response.outputs['buff_out'].output_format = FORMATS.GML
-        response.outputs['buff_out'].file = outPath
+        response.outputs['buff_out'].file = out
 
         return response
 

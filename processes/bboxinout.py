@@ -24,7 +24,7 @@ class Box(Process):
         )
 
     def _handler(self, request, response):
-        response.outputs['bboxout'].data = request.inputs['bboxin'].data
+        response.outputs['bboxout'].data = request.inputs['bboxin'][0].data
 
         return response
 

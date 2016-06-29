@@ -26,17 +26,16 @@ class Centroids(Process):
          # ogr2ogr requires gdal-bin
         from shapely.geometry import shape, mapping
 
-        with temp_dir() as tmp:
-            input_gml = request.inputs['layer'].file
-            input_geojson = os.path.join(tmp, 'input.geojson')
-            subprocess.check_call(['ogr2ogr', '-f', 'geojson',
-                                   input_geojson, input_gml])
-            with open(input_geojson, 'rb') as f:
-                data = json.loads(f.read())
-            for feature in data['features']:
-                geom = shape(feature['geometry'])
-                feature['geometry'] = mapping(geom.centroid)
-            out_bytes = json.dumps(data, indent=2)
-            response.outputs['out'].output_format = Format(FORMATS['JSON'])
-            response.outputs['out'].data = out_bytes
-            return response
+        input_gml = request.inputs['layer'][0].file
+        input_geojson = 'input.geojson'
+        subprocess.check_call(['ogr2ogr', '-f', 'geojson',
+                               input_geojson, input_gml])
+        with open(input_geojson, 'rb') as f:
+            data = json.loads(f.read())
+        for feature in data['features']:
+            geom = shape(feature['geometry'])
+            feature['geometry'] = mapping(geom.centroid)
+        out_bytes = json.dumps(data, indent=2)
+        response.outputs['out'].output_format = Format(FORMATS['JSON'])
+        response.outputs['out'].data = out_bytes
+        return response

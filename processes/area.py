@@ -26,7 +26,7 @@ class Area(Process):
          # ogr2ogr requires gdal-bin
         from shapely.geometry import shape
         with temp_dir() as tmp:
-            input_gml = request.inputs['layer'].file
+            input_gml = request.inputs['layer'][0].file
             input_geojson = os.path.join(tmp, 'input.geojson')
             subprocess.check_call(['ogr2ogr', '-f', 'geojson',
                                    str(input_geojson), input_gml])

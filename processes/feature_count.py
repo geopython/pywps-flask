@@ -23,7 +23,7 @@ class FeatureCount(Process):
     def _handler(self, request, response):
         import lxml.etree
         from pywps.app.basic import xpath_ns
-        doc = lxml.etree.parse(request.inputs['layer'].file)
+        doc = lxml.etree.parse(request.inputs['layer'][0].file)
         feature_elements = xpath_ns(doc, '//gml:featureMember')
         response.outputs['count'].data = len(feature_elements)
         return response

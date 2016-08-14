@@ -59,5 +59,3 @@ And output from Flask in the terminal::
 
         ERROR:PYWPS:Exception: code: 400, locator: service, description: service
         NoneType
-    
-

@@ -12,6 +12,8 @@ PyWPS-Demo is little project, which shall be distributed along with `PyWPS
 several example processes. We are adding also sample `demo.py` which can be used
 with the `Flask <http://flask.pocoo.org>`_ microframework.
 
+For more comprehensive documentation visit http://pywps.readthedocs.io/en/latest/
+
 =========
 Contents:
 =========

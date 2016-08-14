@@ -35,7 +35,7 @@ class Buffer(Process):
         inSource = ogr.Open(request.inputs['poly_in'][0].file)
 
         inLayer = inSource.GetLayer()
-        out = inLayer.GetName()
+        out = inLayer.GetName() + '_buffer'
 
         # create output file
         driver = ogr.GetDriverByName('GML')
@@ -61,7 +61,9 @@ class Buffer(Process):
             outFeature.Destroy()  # makes it crash when using debug
             index += 1
 
-            response.update_status("ahoj", 10)
+            response.update_status('Buffering', 100*(index/featureCount))
+
+        outSource.Destroy()
 
         response.outputs['buff_out'].output_format = FORMATS.GML
         response.outputs['buff_out'].file = out

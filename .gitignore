@@ -1,4 +1,7 @@
 *.pyc
+workdir/*
+outputs/*
+logs/*
 
 # vim, mac os
 *.sw*

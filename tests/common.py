@@ -3,7 +3,7 @@ import sys
 import urllib
 PY2 = sys.version_info[0] == 2
 
-URL = 'http://localhost:5002/wps'
+URL = 'http://localhost:5000/wps'
 
 if not PY2:
     import urllib.request

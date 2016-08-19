@@ -1,0 +1,177 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Flask microframework &mdash; PyWPS-Demo 4.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '4.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="PyWPS-Demo 4.0.0 documentation" href="index.html" />
+    <link rel="next" title="Configuration" href="configuration.html" />
+    <link rel="prev" title="PyWPS-Demo documentation" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="configuration.html" title="Configuration"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="PyWPS-Demo documentation"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PyWPS-Demo 4.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="flask-microframework">
+<span id="flask"></span><h1>Flask microframework<a class="headerlink" href="#flask-microframework" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="http://flask.pocoo.org">Flask</a> microframework is among others</p>
+<ul class="simple">
+<li>built-in development server and debugger</li>
+<li>RESTful request dispatching</li>
+<li>100% WSGI 1.0 compliant</li>
+</ul>
+<p>That means, that you can develop your PyWPS application and modules using Flask
+server and then move it to production environment (e.g. with Apache2 HTTP
+server).</p>
+<div class="section" id="start-pywps-server">
+<h2>Start PyWPS server<a class="headerlink" href="#start-pywps-server" title="Permalink to this headline">¶</a></h2>
+<p>For starting the server, just call:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ python3 demo.py
+</pre></div>
+</div>
+<p>You should be noticed about Running WPS server at <a class="reference external" href="http://localhost:5000/wps">http://localhost:5000/wps</a></p>
+</div>
+<div class="section" id="testing-the-server">
+<h2>Testing the server<a class="headerlink" href="#testing-the-server" title="Permalink to this headline">¶</a></h2>
+<p>You should be able to interact with the server just like it would be any other
+server, either putting the requests to the web browser or using e.g. <cite>wget</cite>:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ wget --content-on-error -O - &quot;http://localhost:5000/wps?service=wps&amp;request=getcapabilities&quot;
+</pre></div>
+</div>
+<p>Or visit the URL directly in the browser:</p>
+<blockquote>
+<div><a class="reference external" href="http://localhost:5000/wps?service=wps&amp;request=getcapabilities">http://localhost:5000/wps?service=wps&amp;request=getcapabilities</a></div></blockquote>
+<p>You should see the response:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;!-- PyWPS 4.0.0-alpha2 --&gt;
+&lt;wps:Capabilities xmlns:ows=&quot;http://www.opengis.net/ows/1.1&quot;
+...
+&lt;/wps:Capabilities&gt;
+</pre></div>
+</div>
+<p>If do do anything wrong, you should see the result in Flask terminal:</p>
+<div class="highlight-python"><div class="highlight"><pre>http://localhost:5000/wps
+</pre></div>
+</div>
+<p>With response:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!-- PyWPS 4.0.0-alpha2 --&gt;
+&lt;ows:ExceptionReport .... &gt;
+&lt;ows:Exception exceptionCode=&quot;MissingParameterValue&quot; locator=&quot;service&quot; &gt;
+    &lt;ows:ExceptionText&gt;service&lt;/ows:ExceptionText&gt;
+&lt;/ows:Exception&gt;
+</pre></div>
+</div>
+<p>And output from Flask in the terminal:</p>
+<div class="highlight-python"><div class="highlight"><pre>ERROR:PYWPS:Exception: code: 400, locator: service, description: service
+NoneType
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/pywps.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Flask microframework</a><ul>
+<li><a class="reference internal" href="#start-pywps-server">Start PyWPS server</a></li>
+<li><a class="reference internal" href="#testing-the-server">Testing the server</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">PyWPS-Demo documentation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="configuration.html"
+                        title="next chapter">Configuration</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/flask.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="configuration.html" title="Configuration"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="PyWPS-Demo documentation"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PyWPS-Demo 4.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, PyWPS Development Team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

@@ -7,3 +7,5 @@ Unipath==1.1
 Shapely==1.5.7
 Werkzeug==0.10.4
 psutil
+-e git+https://github.com/geopython/pywps.git#egg=pywps-4
+

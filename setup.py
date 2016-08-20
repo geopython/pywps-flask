@@ -13,7 +13,7 @@ config = {
     'install_requires': [],
     'packages': ['processes', 'tests'],
     'scripts': ['demo.py'],
-    'name': 'pywps-4-demo'
+    'name': 'pywps-demo'
 }
 
 setup(**config)

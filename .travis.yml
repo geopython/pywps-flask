@@ -12,7 +12,7 @@ install:
   - sudo apt-get install -qq gdal-bin libgdal-dev libgdal1h libgdal1-dev libgeos-dev python-dev python3-dev
   - pip install GDAL==1.10.0 --global-option=build_ext --global-option="-I/usr/include/gdal"
   - pip install -r requirements.txt
-  - git clone https://github.com/jachym/pywps-4.git
+  - git clone https://github.com/geopython/pywps.git pywps-4
   - "cd pywps-4 && python setup.py install && cd .."
   - pip install .
 

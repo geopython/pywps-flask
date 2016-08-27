@@ -6,6 +6,7 @@ import sys
 
 import flask
 
+import pywps
 from pywps import Service
 
 from processes.sleep import Sleep
@@ -36,9 +37,11 @@ service = Service(processes, ['pywps.cfg'])
 
 @app.route("/")
 def hello():
-    return """
-    Welcome to PyWPS server. For OGC WPS endpoint, go to http://localhost:5000/wps url
-    """
+    url = pywps.configuration.get_config_value("server","url")
+    return flask.render_template('home.html',url=url)
+    #return """
+    #Welcome to PyWPS server. For OGC WPS endpoint, go to http://localhost:5000/wps url
+    #"""
 
 @app.route('/wps', methods=['GET', 'POST'])
 def wps():

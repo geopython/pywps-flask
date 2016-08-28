@@ -1,9 +1,9 @@
-__author__ = 'Brauni'
-
-from pywps import Process, LiteralInput, ComplexInput, ComplexOutput, Format, FORMATS
-from pywps.validator.complexvalidator import validategml
+from pywps import Process, LiteralInput, \
+        ComplexInput, ComplexOutput, Format, FORMATS
 
 from pywps.validator.mode import MODE
+
+__author__ = 'Brauni'
 
 
 class Buffer(Process):
@@ -14,14 +14,18 @@ class Buffer(Process):
                   LiteralInput('buffer', 'Buffer size', data_type='float',
                   allowed_values=(0, 1, 10, (10, 10, 100), (100, 100, 1000)))]
         outputs = [ComplexOutput('buff_out', 'Buffered file',
-            supported_formats=[Format('application/gml+xml')])]
+                                 supported_formats=[
+                                            Format('application/gml+xml')
+                                            ]
+                                 )]
 
         super(Buffer, self).__init__(
             self._handler,
             identifier='buffer',
             version='0.1',
             title="GDAL Buffer process",
-            abstract='This process provides standard buffer function using GDAL library',
+            abstract="""The process returns buffers around the input features,
+             using the GDAL library""",
             profile='',
             inputs=inputs,
             outputs=outputs,
@@ -39,7 +43,10 @@ class Buffer(Process):
 
         # create output file
         driver = ogr.GetDriverByName('GML')
-        outSource = driver.CreateDataSource(out, ["XSISCHEMAURI=http://schemas.opengis.net/gml/2.1.2/feature.xsd"])
+        outSource = driver.CreateDataSource(
+                                out,
+                                ["XSISCHEMAURI=\
+                            http://schemas.opengis.net/gml/2.1.2/feature.xsd"])
         outLayer = outSource.CreateLayer(out, None, ogr.wkbUnknown)
 
         # for each feature
@@ -69,4 +76,3 @@ class Buffer(Process):
         response.outputs['buff_out'].file = out
 
         return response
-

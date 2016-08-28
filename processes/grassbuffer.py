@@ -1,9 +1,8 @@
-__author__ = 'Jachym'
-
-from pywps import Process, LiteralInput, ComplexInput, ComplexOutput, Format, FORMATS
-from pywps.validator.complexvalidator import validategml
+from pywps import Process, LiteralInput, ComplexInput, ComplexOutput, Format
 
 from pywps.validator.mode import MODE
+
+__author__ = 'Jachym'
 
 
 class GrassBuffer(Process):
@@ -14,20 +13,23 @@ class GrassBuffer(Process):
                   LiteralInput('buffer', 'Buffer', data_type='float',
                   allowed_values=(0, 1, 10, (10, 10, 100), (100, 100, 1000)))]
         outputs = [ComplexOutput('buff_out', 'Buffered',
-            supported_formats=[Format('application/gml+xml')])]
+                                 supported_formats=[
+                                                Format('application/gml+xml')
+                                                    ])]
 
         super(GrassBuffer, self).__init__(
             self._handler,
             identifier='grassbuffer',
             version='0.1',
             title="GRASS v.buffer",
-            abstract='This process is using GRASS GIS v.buffer module ',
+            abstract='The process uses the  GRASS GIS \
+             v.buffer module to generate buffers around inputs ',
             profile='',
             inputs=inputs,
             outputs=outputs,
             store_supported=True,
             status_supported=True,
-            #grass_location="/tmp/outputs/pyws_process_GMkyxP/pywps_location"
+            # grass_location="/tmp/outputs/pyws_process_GMkyxP/pywps_location"
             grass_location="epsg:3857"
         )
 

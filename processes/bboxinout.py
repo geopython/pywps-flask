@@ -1,22 +1,22 @@
-import os
-import tempfile
+from pywps import Process, BoundingBoxInput, BoundingBoxOutput
 
 __author__ = 'Jachym'
-
-from pywps import Process, BoundingBoxInput, BoundingBoxOutput
 
 
 class Box(Process):
     def __init__(self):
-        inputs = [BoundingBoxInput('bboxin', 'box in', ['epsg:4326', 'epsg:3035'])]
-        outputs = [BoundingBoxOutput('bboxout', 'box out', ['epsg:4326'])]
+        inputs = [BoundingBoxInput('bboxin',
+                                   'box in', ['epsg:4326', 'epsg:3035'])]
+        outputs = [BoundingBoxOutput('bboxout',
+                                     'box out', ['epsg:4326'])]
 
         super(Box, self).__init__(
             self._handler,
             identifier='boundingbox',
             version='0.1',
             title="Bounding box in- and out",
-            abstract='Give bounding box, return the same',
+            abstract="""Given a  bounding box, it
+             returns the same bounding box""",
             inputs=inputs,
             outputs=outputs,
             store_supported=True,
@@ -27,4 +27,3 @@ class Box(Process):
         response.outputs['bboxout'].data = request.inputs['bboxin'][0].data
 
         return response
-

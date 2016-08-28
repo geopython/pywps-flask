@@ -5,16 +5,13 @@
 
 <p>This is a demo PyWPS server, point your WPS client to:
 <p>
-	<code>{{ url }}</code>
+	<code>{{ server_url }}</code>
 </p>
 It exposesthe following processes:
 <ul>
-	<li><b>say_hello</b> - returns a literal string output based on
-		the input.</li>
-	<li><b>feature_count</b> - counts number of features in the
-		uploaded GML.</li>
-	<li><b>centroids</b> - returns GeoJSON with centroids of features
-		in the uploaded GML.</li>
+      {% for name, abstract in process_descriptor.items() %}
+          <li> <b>{{ name }}</b>  - {{ abstract }} </li>
+      {% endfor %}
 </ul>
 <p></p>
 <p>
@@ -26,7 +23,6 @@ It exposesthe following processes:
 		target="_blank">
 		github.com/geopython/pywps-demo/blob/master/demo.py</a>.
 </p>
-
 
 
 {% endblock %}

@@ -3,7 +3,8 @@ from pywps import Process, ComplexInput, Format, LiteralOutput
 
 class FeatureCount(Process):
     def __init__(self):
-        inputs = [ComplexInput('layer', 'Layer', [Format('application/gml+xml')])]
+        inputs = [ComplexInput('layer', 'Layer',
+                               [Format('application/gml+xml')])]
         outputs = [LiteralOutput('count', 'Count', data_type='integer')]
 
         super(FeatureCount, self).__init__(
@@ -11,7 +12,8 @@ class FeatureCount(Process):
             identifier='feature_count',
             version='None',
             title='Feature count',
-            abstract='This process counts the number of features in a vector',
+            abstract='This process counts the number\
+             of features in an uploaded GML ',
             profile='',
             metadata=['Feature', 'Count'],
             inputs=inputs,

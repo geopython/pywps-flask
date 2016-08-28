@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 
 import os
-import psutil
-import sys
-
 import flask
 
 import pywps
@@ -32,21 +29,32 @@ processes = [
     Box()
 ]
 
+# For the process list on the home page
+
+process_descriptor = {}
+for process in processes:
+    abstract = process.abstract
+    identifier = process.identifier
+    process_descriptor[identifier] = abstract
+
 # This is, how you start PyWPS instance
 service = Service(processes, ['pywps.cfg'])
 
+
 @app.route("/")
 def hello():
-    url = pywps.configuration.get_config_value("server","url")
-    return flask.render_template('home.html',url=url)
-    #return """
-    #Welcome to PyWPS server. For OGC WPS endpoint, go to http://localhost:5000/wps url
-    #"""
+    server_url = pywps.configuration.get_config_value("server", "url")
+    request_url = flask.request.url
+    return flask.render_template('home.html', request_url=request_url,
+                                 server_url=server_url,
+                                 process_descriptor=process_descriptor)
+
 
 @app.route('/wps', methods=['GET', 'POST'])
 def wps():
 
     return service
+
 
 @app.route('/outputs/'+'<filename>')
 def outputfile(filename):
@@ -62,11 +70,11 @@ def outputfile(filename):
     else:
         flask.abort(404)
 
+
 @app.route('/static/'+'<filename>')
 def staticfile(filename):
     targetfile = os.path.join('static', filename)
     if os.path.isfile(targetfile):
-        file_ext = os.path.splitext(targetfile)[1]
         with open(targetfile, mode='rb') as f:
             file_bytes = f.read()
         mime_type = None
@@ -78,12 +86,15 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser(
-        description="Script for starting PyWPS demo instance with sample processes",
-        epilog="""Do not use demo in production environment. It's intended to be running in test environment only!
+        description="""Script for starting PyWPS
+         demo instance with sample processes""",
+        epilog="""Do not use demo in production environment.
+         It's intended to be running in test environment only!
         For more documentation, visit http://pywps.org/doc
         """
         )
-    parser.add_argument('-d', '--daemon', action='store_true', help="run in daemon mode")
+    parser.add_argument('-d', '--daemon',
+                        action='store_true', help="run in daemon mode")
     args = parser.parse_args()
 
     if args.daemon:
@@ -91,7 +102,7 @@ if __name__ == "__main__":
         try:
             pid = os.fork()
         except OSError as e:
-             raise Exception("%s [%d]" % (e.strerror, e.errno))
+            raise Exception("%s [%d]" % (e.strerror, e.errno))
 
         if (pid == 0):
             os.setsid()
@@ -100,4 +111,3 @@ if __name__ == "__main__":
             os._exit(0)
     else:
         app.run(threaded=True)
-

@@ -3,15 +3,20 @@ from pywps import Process, LiteralInput, LiteralOutput
 
 class Sleep(Process):
     def __init__(self):
-        inputs = [LiteralInput('delay', 'Delay between every update', data_type='float')]
-        outputs = [LiteralOutput('sleep_output', 'Sleep Output', data_type='string')]
+        inputs = [LiteralInput('delay',
+                               'Delay between every update',
+                               data_type='float')]
+        outputs = [LiteralOutput('sleep_output',
+                                 'Sleep Output',
+                                 data_type='string')]
 
         super(Sleep, self).__init__(
             self._handler,
             identifier='sleep',
             version='None',
             title='Sleep Process',
-            abstract='This process will sleep for a given delay or 10 seconds if not a valid value',
+            abstract="The process will sleep for a given delay \
+            or 10 seconds if not a valid value",
             profile='',
             metadata=['Sleep', 'Wait', 'Delay'],
             inputs=inputs,

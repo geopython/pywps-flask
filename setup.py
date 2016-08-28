@@ -5,9 +5,9 @@ except ImportError:
 
 config = {
     'description': 'Implementation of PyWPS-4 server',
-    'author': 'Luis de Sausa',
+    'author': 'Luis de Sousa',
     'url': 'http://pywps.org',
-    'download_url': 'https://github.com/ldesousa/pywps-4-demo',
+    'download_url': 'https://github.com/geopython/pywps-demo',
     'author_email': 'luis.a.de.sousa@gmail.com',
     'version': '4.0',
     'install_requires': [],

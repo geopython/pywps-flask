@@ -1,10 +1,6 @@
 PyWPS-4 demo application
 ========================
 
-.. figure:: https://travis-ci.org/PyWPS/pywps-4-demo.svg
-
-    https://travis-ci.org/PyWPS/pywps-4-demo
-
 This is a simple demo app written using PyWPS 4. It has been tested with
 QGIS 1.8.
 
@@ -15,7 +11,6 @@ The app depends on PyWPS and several other libraries that are listed in
 ``requirements.txt``. You can install them with pip::
 
     $ pip install -r requirements.txt
-    $ pip install -e git+https://github.com/jachym/pywps-4.git@master#egg=pywps-dev
 
 For Debian based systems you will need to install GDAL with::
 

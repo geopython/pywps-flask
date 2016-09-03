@@ -24,7 +24,7 @@ with open('VERSION.txt') as ff:
 
 with open('requirements.txt') as f:
     INSTALL_REQUIRES = f.read().splitlines()[:-1]
-    INSTALL_REQUIRES.append('pywps-'+VERSION)
+    INSTALL_REQUIRES.append('pywps=='+VERSION)
 
 DESCRIPTION = (
 '''PyWPS is an implementation of the Web Processing Service standard from the

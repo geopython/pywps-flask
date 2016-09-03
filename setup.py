@@ -23,7 +23,7 @@ with open('VERSION.txt') as ff:
     VERSION = ff.read().strip()
 
 with open('requirements.txt') as f:
-    INSTALL_REQUIRES = f.read().splitlines()
+    INSTALL_REQUIRES = f.read().splitlines()[:-1]
     INSTALL_REQUIRES.append('pywps-'+VERSION)
 
 DESCRIPTION = (

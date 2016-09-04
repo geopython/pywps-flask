@@ -19,6 +19,12 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+
+try:
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setup
+
 with open('VERSION.txt') as ff:
     VERSION = ff.read().strip()
 
@@ -36,11 +42,6 @@ for testing and development purposes.
 ''')
 
 KEYWORDS = 'PyWPS WPS OGC processing'
-
-try:
-    from setuptools import setup
-except ImportError:
-    from distutils.core import setup
 
 config = {
     'description': DESCRIPTION,

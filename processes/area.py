@@ -28,6 +28,8 @@ from pywps.wpsserver import temp_dir
 
 
 class Area(Process):
+    """Process calculating area of given polygon
+    """
     def __init__(self):
         inputs = [ComplexInput('layer', 'Layer', [Format('application/gml+xml')])]
         outputs = [LiteralOutput('area', 'Area', data_type='string')]

@@ -8,7 +8,7 @@ from tests import test_requests
 from tests import test_log
 #from tests import test_exceptions
 
-def load_tests():
+def load_tests(loader=None, tests=None, pattern=None):
     return unittest.TestSuite([
         test_capabilities.load_tests(),
         test_describe.load_tests(),

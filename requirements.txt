@@ -8,4 +8,5 @@ requests==2.11.1
 Shapely==1.5.7
 Werkzeug==0.10.4
 SQLAlchemy==1.0.15
+psutil==4.3.1
 -e git+https://github.com/geopython/pywps.git@pywps-4.0.0rc2#egg=pywps-4.0.0-rc2

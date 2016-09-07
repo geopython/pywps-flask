@@ -5,6 +5,15 @@ PY2 = sys.version_info[0] == 2
 
 URL = 'http://localhost:5000/wps'
 
+NAMESPACES = {
+    'xlink': "http://www.w3.org/1999/xlink",
+    'wps': "http://www.opengis.net/wps/1.0.0",
+    'ows': "http://www.opengis.net/ows/1.1",
+    'gml': "http://www.opengis.net/gml",
+    'xsi': "http://www.w3.org/2001/XMLSchema-instance",
+    'ogr': "http://ogr.maptools.org/"
+}
+
 if not PY2:
     import urllib.request
 

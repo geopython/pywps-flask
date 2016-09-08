@@ -8,7 +8,7 @@ class LoggingTest(unittest.TestCase):
         conn = sqlite3.connect('logs/pywps-logs.sqlite3')
 
         cur = conn.cursor()
-        cur.execute('select * from pywps_requests')
+        cur.execute('select * from pywps_stored_requests')
         all_lines = cur.fetchall()
 
         self.assertEqual(len(all_lines)%5, 0)

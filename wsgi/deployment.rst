@@ -17,7 +17,7 @@ First, the WSGI module must be installed and enabled::
 You then can edit your site configuration file
 (`/etc/apache2/sites-enabled/yoursite.conf`) and add the following::
 
-        # PyWPS-4
+        # PyWPS
         WSGIDaemonProcess pywps user=www-data group=www-data processes=2 threads=5
         WSGIScriptAlias /pywps /var/www/pywps/pywps.wsgi
 

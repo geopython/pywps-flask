@@ -7,3 +7,11 @@ logs/*
 *.sw*
 .DS_Store
 .*.un~
+
+# python setup.py build/install artifacts
+build
+dist
+pywps_demo.egg-info/
+
+# docs build artifacts
+_build/

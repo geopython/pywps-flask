@@ -19,6 +19,7 @@
 # SOFTWARE.
 
 from pywps import Process, LiteralInput, LiteralOutput
+from pywps.app.Common import Metadata
 
 
 class Sleep(Process):
@@ -33,7 +34,7 @@ class Sleep(Process):
             title='Sleep Process',
             abstract='This process will sleep for a given delay or 10 seconds if not a valid value',
             profile='',
-            metadata=['Sleep', 'Wait', 'Delay'],
+            metadata=[Metadata('Sleep'), Metadata('Wait'), Metadata('Delay')],
             inputs=inputs,
             outputs=outputs,
             store_supported=True,

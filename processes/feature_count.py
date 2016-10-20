@@ -19,6 +19,7 @@
 # SOFTWARE.
 
 from pywps import Process, ComplexInput, Format, LiteralOutput
+from pywps.app.Common import Metadata
 
 
 class FeatureCount(Process):
@@ -33,7 +34,7 @@ class FeatureCount(Process):
             title='Feature count',
             abstract='This process counts the number of features in a vector',
             profile='',
-            metadata=['Feature', 'Count'],
+            metadata=[Metadata('Feature'), Metadata('Count')],
             inputs=inputs,
             outputs=outputs,
             store_supported=True,

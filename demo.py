@@ -37,6 +37,7 @@ from processes.feature_count import FeatureCount
 from processes.buffer import Buffer
 from processes.area import Area
 from processes.bboxinout import Box
+from processes.jsonprocess import TestJson
 
 
 app = flask.Flask(__name__)
@@ -49,7 +50,8 @@ processes = [
     Sleep(),
     Buffer(),
     Area(),
-    Box()
+    Box(),
+    TestJson()
 ]
 
 # This is, how you start PyWPS instance

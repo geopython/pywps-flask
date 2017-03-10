@@ -1,3 +1,4 @@
+
 import json
 import os
 import subprocess
@@ -8,6 +9,8 @@ __author__ = 'matteo'
 
 
 class Area(Process):
+    """Process calculating area of given polygon
+    """
     def __init__(self):
         inputs = [ComplexInput('layer', 'Layer',
                                [Format('application/gml+xml')])]

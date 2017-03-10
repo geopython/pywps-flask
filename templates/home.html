@@ -1,3 +1,4 @@
+
 {% extends "base.html" %} {% block title %}PyWPS-4 demo app{% endblock
 %} {% block major_content%}
 <br />
@@ -36,4 +37,34 @@ It exposesthe following processes:
 </p>
 
 
-{% endblock %}
+
+
+      <ul>
+        <li>
+          <b>say_hello</b> -
+          returns a literal string output based on the input.
+        </li>
+
+        <li>
+          <b>feature_count</b> -
+          counts number of features in the uploaded GML.
+        </li>
+
+        <li>
+          <b>centroids</b> -
+          returns GeoJSON with centroids of features in the uploaded GML.
+        </li>
+      </ul>
+
+      <p>
+        PyWPS documentation is at
+        <a href="http://pywps.rtfd.org/">pywps.rtfd.org</a>;
+        source code and issue tracking at
+        <a href="https://github.com/geopython/pywps/">
+        github.com/geopython/pywps</a>. Code for this app is at
+        <a href="https://github.com/geopython/pywps-demo">
+        github.com/geopython/pywps-demo</a>.
+      </p>
+    </div>
+  </body>
+</html>

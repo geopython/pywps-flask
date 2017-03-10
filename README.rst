@@ -1,7 +1,7 @@
-PyWPS-4 demo application
+PyWPS demo application
 ========================
 
-This is a simple demo app written using PyWPS 4. It has been tested with
+This is a simple demo app written using PyWPS. It has been tested with
 QGIS 1.8.
 
 

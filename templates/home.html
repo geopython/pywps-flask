@@ -1,18 +1,43 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>PyWPS demo app</title>
-    <link rel="stylesheet"
-      href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
-  </head>
 
-  <body>
-    <div class="container">
-      <h1>PyWPS demo app</h1>
+{% extends "base.html" %} {% block title %}PyWPS-4 demo app{% endblock
+%} {% block major_content%}
+<br />
+<h1>PyWPS-4 demo app</h1>
 
-      <p>This is a demo PyWPS server, point your WPS client to
-      <code>{{ url }}</code>. It exposes a few processes:</p>
+<p>This is a demo PyWPS server, point your WPS client to:
+<p>
+	<code>{{ server_url }}</code>
+</p>
+<p>
+	<a href='{{ server_url }}?request=GetCapabilities&service=WPS'
+		target="_blank" title='{{ server_url }}?request=GetCapabilities&service=WPS'> <img
+		src="/static/pics/PyWPS-GetCapabilities-brightgreen.svg" />
+	</a> <a
+		href='{{ server_url }}?request=DescribeProcess&service=WPS&identifier=all&version=1.0.0'
+		target="_blank" title='{{ server_url }}?request=DescribeProcess&service=WPS&identifier=all&version=1.0.0'> <img
+		src="/static/pics/PyWPS-DescribeProcess-green.svg" />
+	</a>
+</p>
+It exposesthe following processes:
+<ul>
+	{% for name, abstract in process_descriptor.items() %}
+	<li><b>{{ name }}</b> - {{ abstract }}</li> &nbsp;&nbsp;  
+	<a href='{{ server_url }}?request=DescribeProcess&service=WPS&identifier=all&version=1.0.0' target="_blank" title='{{ server_url }}?request=DescribeProcess&service=WPS&identifier={{ name }}&version=1.0.0'> <img src="/static/pics/PyWPS-DescribeProcess-green.svg" /></a>
+	{% endfor %}
+</ul>
+<p></p>
+<p>
+	PyWPS documentation is at <a href="http://pywps.rtfd.org/"
+		target="_blank">pywps.rtfd.org</a>; source code and issue tracking at
+	<a href="https://github.com/geopython/pywps" target="_blank">
+		github.com/geopython/pywps</a>. Code for this app is at <a
+		href="https://github.com/geopython/pywps-demo/blob/master/demo.py"
+		target="_blank">
+		github.com/geopython/pywps-demo/blob/master/demo.py</a>.
+</p>
+
+
+
 
       <ul>
         <li>

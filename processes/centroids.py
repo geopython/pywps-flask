@@ -19,23 +19,27 @@
 # SOFTWARE.
 
 import json
-import os
 import subprocess
 from pywps import Process, ComplexInput, ComplexOutput, Format, FORMATS
-from pywps.wpsserver import temp_dir
 
 
 class Centroids(Process):
     def __init__(self):
         inputs = [ComplexInput('layer', 'Layer',
-            supported_formats=[Format('application/gml+xml')])]
+                               supported_formats=[
+                                                  Format('application/gml+xml')
+                                                  ])]
         outputs = [ComplexOutput('out', 'Referenced Output',
-            supported_formats=[Format('application/json')])]
+                                 supported_formats=[
+                                                    Format('application/json')
+                                                    ])]
 
         super(Centroids, self).__init__(
             self._handler,
             identifier='centroids',
             title='Process Centroids',
+            abstract='Returns a GeoJSON \
+                with centroids of features from  an uploaded GML.',
             inputs=inputs,
             outputs=outputs,
             store_supported=True,
@@ -43,7 +47,7 @@ class Centroids(Process):
         )
 
     def _handler(self, request, response):
-         # ogr2ogr requires gdal-bin
+        # ogr2ogr requires gdal-bin
         from shapely.geometry import shape, mapping
 
         input_gml = request.inputs['layer'][0].file

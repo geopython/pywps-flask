@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>{% block title %}{% endblock %}</title>
+    
+    <meta name="description" content="PyWPS - PyWPS is an implementation of the Web Processing Service standard from the Open Geospatial Consortium. PyWPS is written in Python.">
+    
+    
+    <meta name="keywords" content="PyWPS, PyWPS, WPS, OGC, processing">
+    
+    <meta name="author" content="PyWPS Development Team, represented by Jachym Cepicky">
+    <link rel="stylesheet" href="http://pywps.org/stylesheets/styles.css">
+    <link rel="stylesheet" href="http://pywps.org/stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!-- Hosted on GitHub Pages - Theme by orderedlist (https://github.com/orderedlist -->
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <a href="{{ request_url }}"><img src="http://pywps.org/images/pywps.png"/></a>
+        <ul style="list-style-type: none;">
+          <li><a href="http://pywps.org/docs">Docs</a></li>
+          <li><a href="http://pywps.org/download">Download</a></li>
+          <li><a href="http://pywps.org/community">Community</a></li>
+          <li><a href="http://pywps.org/development">Development</a></li>
+          <li><a href="http://pywps.org/gallery">Gallery</a></li>
+          <li><a href="http://pywps.org/science">Science</a></li>
+          <li><a href="http://pywps.org/license">License</a></li>
+          <li><a href="http://pywps.org/history">History</a></li>
+          <li><a href="http://pywps.org/news">News</a></li>
+          <li><a href="http://pywps.org/faq">FAQ</a></li>
+          <li><a href="http://pywps.org/contributors">Contributors</a></li>
+        </ul>
+        <img src="http://svn.osgeo.org/osgeo/marketing/logo/png8/150/OSGeo_incubation.png"/>
+      </header>
+      <section>{% block major_content %} {% endblock %}</section>
+      <footer>
+        <p><small>Copyright (C) 2014-2016 PyWPS Development Team, represented by Jachym Cepicky</small>. <a rel="license" title="This work is licensed under a Creative Commons Attribution 4.0 International License" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/80x15.png" /></a></p>
+      </footer>
+    </div>
+    <script src="http://pywps.org/javascripts/scale.fix.js"></script>
+  </body>
+</html>

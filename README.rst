@@ -46,45 +46,39 @@ has the default pywps4-demo implementation using only Flask while folder ``nginx
 Docker-flask
 ------------
 
-To build the image (inside the folder with the Dockerfile)
-```
-docker build -t pywps4-demo:latest .
-```
-And to run it
+To build the image (inside the folder with the Dockerfile):: 
 
-```
-docker run -p 5000:5000 pywps4-demo:latest
-```
+    $ docker build -t pywps4-demo:latest .
 
-Pywps will be available in  the following URL
+And to run it:: 
 
-```
-http://localhost:5000
-``` 
+    $ docker run -p 5000:5000 pywps4-demo:latest
+
+
+Pywps will be available in  the following URL::
+
+    $ http://localhost:5000 
 
 
 Docker-nginx
 ------------
 
-To build the image (inside the folder with the Dockerfile).
+To build the image (inside the folder with the Dockerfile)::
+
+    $ docker build -t pywps4-demo .
 
 
-``
-docker build -t pywps4-demo .
-``
+Gunicorn uses a set of workers to run pywps (normally ``workers = (2 * cpu) + 1``), the default value used was 5 but it can be overwritten by setting the env flag GU_WORKERS:: 
 
 
-Gunicorn uses a set of workers to run pywps (normally ```workers = (2 * cpu) + 1```), the default value used was 5 but it can be overwritten by setting the env flag GU_WORKERS:
+    $ docker run -e GU_WORKERS=10  -p 80:80 -it pywps4-demo:nginx
 
-```
-docker run -e GU_WORKERS=10  -p 80:80 -it pywps4-demo:nginx
-```
 
-In this case pywps (only the WPS) will be avalable on
+In this case pywps (only the WPS) will be avalable on::
 
-```
-http://localhost
-```
+
+    http://localhost
+
 
 
 

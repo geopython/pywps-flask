@@ -67,19 +67,24 @@ Docker-nginx
 ------------
 
 To build the image (inside the folder with the Dockerfile).
-```
-docker build -t pywps4-demo .
-```
 
-Gunicorn uses a set of workers to run pywps (normally ```workers = (2 * cpu) + 1```), the default value used was 5 but it can be overwritten by setting the env flag GU_WORKERS:
-```
+
+``
+docker build -t pywps4-demo .
+``
+
+
+Gunicorn uses a set of workers to run pywps (normally ``workers = (2 * cpu) + 1``), the default value used was 5 but it can be overwritten by setting the env flag GU_WORKERS:
+
+``
 docker run -e GU_WORKERS=10  -p 80:80 -it pywps4-demo:nginx
-```
+``
 
 In this case pywps (only the WPS) will be avalable on
-```
+
+``
 http://localhost
-```
+``
 
 
 

@@ -39,8 +39,8 @@ Simply run the python file::
 
 Docker
 ------
-The docker folder contains 2 subfolders, each subfolder contains a differente pywps implementation. Folder ```flask``` 
-has the default pywps4-demo implementation using only Flask while folder ```nginx```  implements pywps using Nginx and Green unicorn as WSGI server.
+The docker folder contains 2 subfolders, each subfolder contains a differente pywps implementation. Folder ``flask`` 
+has the default pywps4-demo implementation using only Flask while folder ``nginx``  implements pywps using Nginx and Green unicorn as WSGI server.
 
 
 Docker-flask
@@ -74,17 +74,17 @@ docker build -t pywps4-demo .
 ``
 
 
-Gunicorn uses a set of workers to run pywps (normally ``workers = (2 * cpu) + 1``), the default value used was 5 but it can be overwritten by setting the env flag GU_WORKERS:
+Gunicorn uses a set of workers to run pywps (normally ```workers = (2 * cpu) + 1```), the default value used was 5 but it can be overwritten by setting the env flag GU_WORKERS:
 
-``
+```
 docker run -e GU_WORKERS=10  -p 80:80 -it pywps4-demo:nginx
-``
+```
 
 In this case pywps (only the WPS) will be avalable on
 
-``
+```
 http://localhost
-``
+```
 
 
 

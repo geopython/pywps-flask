@@ -4,12 +4,12 @@
    contain the root `toctree` directive.
 
 ########################
-PyWPS-Demo documentation
+PyWPS-Flask documentation
 ########################
 
-PyWPS-Demo is little project, which shall be distributed along with `PyWPS
-<http://pywps.org>`_ project. This is just demo server instance of PyWPS, with
-several example processes. We are adding also sample `demo.py` which can be used
+PyWPS-Flask is a little project, which shall be distributed along with `PyWPS
+<http://pywps.org>`_ project. This is just an example service based on PyWPS, with
+several example processes. We are adding also a sample `demo.py` which can be used
 with the `Flask <http://flask.pocoo.org>`_ microframework.
 
 For more comprehensive documentation visit http://pywps.readthedocs.io/en/latest/

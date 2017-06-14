@@ -1,7 +1,7 @@
-PyWPS demo application
+PyWPS example service
 ========================
 
-This is a simple demo app written using PyWPS. It has been tested with
+This is a simple example service written using PyWPS. It has been tested with
 QGIS 1.8.
 
 
@@ -40,7 +40,7 @@ Simply run the python file::
 Docker
 ------
 The docker folder contains 2 subfolders, each subfolder contains a differente pywps implementation. Folder ``flask`` 
-has the default pywps4-demo implementation using only Flask while folder ``nginx``  implements pywps using Nginx and Green unicorn as WSGI server.
+has the default pywps-flask implementation using only Flask while folder ``nginx``  implements pywps using Nginx and Green unicorn as WSGI server.
 
 
 Docker-flask

@@ -19,7 +19,7 @@ RUN mkdir -p /run/nginx
 
 #For pywps
 RUN pip3 install gunicorn
-RUN ln -s /pywps-demo/wsgi/pywps.wsgi  /pywps-demo/wsgi/pywps_app.py
+RUN ln -s /pywps-flask/wsgi/pywps.wsgi  /pywps-flask/wsgi/pywps_app.py
 
 EXPOSE 80
 ENTRYPOINT ["/run_all.sh"]

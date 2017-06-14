@@ -36,9 +36,9 @@ DESCRIPTION = (
 '''PyWPS is an implementation of the Web Processing Service standard from the
 Open Geospatial Consortium. PyWPS is written in Python.
 
-PyWPS-demo is sample implementation of PyWPS server, distributed along with
-basic set of example processes and sample configuration file. It's usually used
-for testing and development purposes.
+PyWPS-Flask is an example service using the PyWPS server, distributed along 
+with a basic set of sample processes and sample configuration file. It's 
+usually used for testing and development purposes.
 ''')
 
 KEYWORDS = 'PyWPS WPS OGC processing'
@@ -50,10 +50,10 @@ config = {
     'license': 'MIT',
     'platforms': 'all',
     'url': 'http://pywps.org',
-    'download_url': 'https://github.com/geopython/pywps-demo',
+    'download_url': 'https://github.com/geopython/pywps-flask',
     'author_email': 'luis.a.de.sousa@gmail.com',
     'maintainer': 'Luis de Sousa',
-    'maintainer_email': 'luis.a.de.sousa@gmail.com',
+    'maintainer_email': 'luis.de.sousa@protonmail.ch',
     'classifiers': [
         'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
@@ -71,7 +71,7 @@ config = {
      ],
     'packages': ['processes', 'tests'],
     'scripts': ['demo.py'],
-    'name': 'pywps-demo'
+    'name': 'pywps-flask'
 }
 
 setup(**config)

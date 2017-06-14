@@ -15,10 +15,10 @@ You can develop your PyWPS application and modules using a local Flask
 server and then move it to a production environment (e.g. with Apache2 HTTP
 server).
 
-Start PyWPS server
+Start PyWPS service
 ------------------
 
-Start the PyWPS demo-server using Flask's built-in server::
+Start the PyWPS example service using Flask's built-in server::
 
     $ python3 demo.py
 
@@ -71,7 +71,7 @@ Processes
 ~~~~~~~~~
 
 The `GetCapabilities` response in the previous section lists the WPS Processes
-available on the WPS demo-server.
+available on the Flask example service.
 
 Issue a `DescribeProcess` WPS request for the `say_hello` WPS Process using the URL::
 

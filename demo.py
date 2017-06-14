@@ -109,9 +109,9 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser(
-        description="""Script for starting PyWPS
-         demo instance with sample processes""",
-        epilog="""Do not use demo in production environment.
+        description="""Script for starting an example PyWPS
+                       instance with sample processes""",
+        epilog="""Do not use this service in a production environment.
          It's intended to be running in test environment only!
         For more documentation, visit http://pywps.org/doc
         """

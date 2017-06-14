@@ -13,15 +13,15 @@ RUN apk add --no-cache \
 	libxslt-dev \
 	linux-headers
 
-RUN git clone https://github.com/geopython/pywps-demo.git
+RUN git clone https://github.com/geopython/pywps-flask.git
  
-WORKDIR /pywps-demo
+WORKDIR /pywps-flask
 RUN pip3 install -r requirements.txt
  
 EXPOSE 5000 
 ENTRYPOINT ["/usr/bin/python3", "demo.py","-a"]
 
-#docker build -t pywps-demo . 
-#docker run -p 5000:5000 pywps-demo
+#docker build -t pywps-flask . 
+#docker run -p 5000:5000 pywps-flask
 #http://localhost:5000/wps?request=GetCapabilities&service=WPS
 #http://localhost:5000/wps?request=DescribeProcess&service=WPS&identifier=all&version=1.0.0

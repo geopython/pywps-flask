@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# PyWPS-Demo documentation build configuration file, created by
+# PyWPS-Flask documentation build configuration file, created by
 # sphinx-quickstart on Thu Aug 11 21:27:33 2016.
 #
 # This file is execfile()d with the current directory set to its
@@ -53,7 +53,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'PyWPS-Demo'
+project = u'PyWPS-Flask'
 copyright = u'2016, PyWPS Development Team'
 author = u'PyWPS Development Team'
 
@@ -127,7 +127,7 @@ html_theme_options = {
     'travis_button': True,
     'github_banner': True,
     'github_user': 'geopython',
-    'github_repo': 'pywps-demo',
+    'github_repo': 'pywps-flask',
     'github_button': True,
     'logo': 'pywps.png',
     'logo_name': False
@@ -225,7 +225,7 @@ html_sidebars = {
 #html_search_scorer = 'scorer.js'
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'PyWPS-Demodoc'
+htmlhelp_basename = 'PyWPS-Flaskdoc'
 
 # -- Options for LaTeX output ---------------------------------------------
 
@@ -247,7 +247,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'PyWPS-Demo.tex', u'PyWPS-Demo Documentation',
+    (master_doc, 'PyWPS-Flask.tex', u'PyWPS-Flask Documentation',
      u'PyWPS Development Team', 'manual'),
 ]
 
@@ -277,7 +277,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'pywps-demo', u'PyWPS-Demo Documentation',
+    (master_doc, 'pywps-flask', u'PyWPS-Flask Documentation',
      [author], 1)
 ]
 
@@ -291,8 +291,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'PyWPS-Demo', u'PyWPS-Demo Documentation',
-     author, 'PyWPS-Demo', 'One line description of project.',
+    (master_doc, 'PyWPS-Flask', u'PyWPS-Flask Documentation',
+     author, 'PyWPS-Flask', 'One line description of project.',
      'Miscellaneous'),
 ]
 
@@ -318,4 +318,4 @@ def linkcode_resolve(domain, info):
     if not info['module']:
         return None
     filename = info['module'].replace('.', '/')
-    return "http://github.com/geopython/pywps-demo/blob/master/%s.py" % filename
+    return "http://github.com/geopython/pywps-flask/blob/master/%s.py" % filename

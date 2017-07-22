@@ -23,6 +23,9 @@ from pywps.app.Common import Metadata
 
 
 class Sleep(Process):
+    
+    SUCCESS_MESSAGE = 'done sleeping'
+    
     def __init__(self):
         inputs = [LiteralInput('delay',
                                'Delay between every update',
@@ -64,6 +67,23 @@ class Sleep(Process):
         time.sleep(sleep_delay)
         response.update_status('PyWPS Process started. Waiting...', 80)
         time.sleep(sleep_delay)
-        response.outputs['sleep_output'].data = 'done sleeping'
+        response.outputs['sleep_output'].data = self.SUCCESS_MESSAGE
 
         return response
+    
+    
+def main():
+    """Example of how to debug this process, running outside a PyWPS instance.
+    """
+    sleep = Sleep()
+    (request, response) = sleep.build_request_response()
+    literal_in = sleep.inputs[0]
+    literal_in.data = 10
+    request.inputs["delay"].append(literal_in)
+    sleep._handler(request, response)
+
+    assert response.outputs["sleep_output"].data == sleep.SUCCESS_MESSAGE
+    print("All good!") 
+
+if __name__ == "__main__":
+    main()

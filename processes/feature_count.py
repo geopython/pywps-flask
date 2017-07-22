@@ -50,3 +50,21 @@ class FeatureCount(Process):
         feature_elements = xpath_ns(doc, '//gml:featureMember')
         response.outputs['count'].data = len(feature_elements)
         return response
+    
+    
+def main():
+    """Example of how to debug this process, executing it outside a PyWPS 
+       instance.
+    """
+    count = FeatureCount()
+    (request, response) = count.build_request_response()
+    literal_in = count.inputs[0]
+    literal_in.file = '../data/railroads.gml'
+    request.inputs["layer"].append(literal_in)
+    count._handler(request, response)
+
+    assert response.outputs['count'].data == 832
+    print("All good!") 
+
+if __name__ == "__main__":
+    main()

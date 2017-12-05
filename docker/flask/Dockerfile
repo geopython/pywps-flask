@@ -1,17 +1,48 @@
-FROM alpine:latest
+FROM alpine:3.6
 MAINTAINER Jorge S. Mendes de Jesus <jorge.dejesus@geocat.net>
 
-RUN apk add --no-cache \
+ARG GDAL_VERSION=2.2.0
+ARG XERCES_VERSION=3.2.0
+ARG PROCESSOR_N=4
+
+RUN apk update && apk add --no-cache \
 	git \
 	gcc \
 	bash \
 	openssh \
 	musl-dev  \
 	python3 \
-        python3-dev \
+    python3-dev \
 	libxml2-dev  \
 	libxslt-dev \
-	linux-headers
+    linux-headers \
+    expat \
+    expat-dev \
+    g++ \
+    libstdc++ \
+    make \
+    swig  
+RUN apk add --no-cache \
+    --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing \
+    geos \
+    geos-dev
+
+#Compiling Xerces
+RUN wget http://www.apache.org/dist/xerces/c/3/sources/xerces-c-${XERCES_VERSION}.tar.gz -O /tmp/xerces-c-${XERCES_VERSION}.tar.gz && \
+    tar xvf /tmp/xerces-c-${XERCES_VERSION}.tar.gz -C /tmp && \
+    cd /tmp/xerces-c-${XERCES_VERSION} && \
+    CFLAGS="-O3 -march=native -Wall" CXXFLAGS=${CFLAGS} ./configure --prefix=/usr/local/src/xerces && \
+    make -j $PROCESSOR_N install
+
+# Install GDAL
+RUN wget http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION}.tar.gz -O /tmp/gdal.tar.gz && \
+	tar xzf /tmp/gdal.tar.gz -C /tmp && \
+	cd /tmp/gdal-${GDAL_VERSION} && \
+        CFLAGS="-O3 -march=native" CXXFLAGS=${CFLAGS} LDFLAGS="-s"  ./configure --with-expat=yes --with-xerces=/opt/xerces --with-geos=yes \
+	&& make -j ${PROCESSOR_N} && make install
+
+RUN cd /tmp/gdal-${GDAL_VERSION}/swig/python \
+	&& python3 setup.py install
 
 RUN git clone https://github.com/geopython/pywps-flask.git
  

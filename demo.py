@@ -79,7 +79,7 @@ def wps():
     return service
 
 
-@app.route('/outputs/'+'<filename>')
+@app.route('/outputs/'+'<path:filename>')
 def outputfile(filename):
     targetfile = os.path.join('outputs', filename)
     if os.path.isfile(targetfile):
@@ -94,7 +94,7 @@ def outputfile(filename):
         flask.abort(404)
 
 
-@app.route('/static/'+'<filename>')
+@app.route('/static/'+'<path:filename>')
 def staticfile(filename):
     targetfile = os.path.join('static', filename)
     if os.path.isfile(targetfile):

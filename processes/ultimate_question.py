@@ -1,6 +1,8 @@
 
-from pywps import Process, LiteralOutput
+from pywps.app import Process
+from pywps.inout.outputs import LiteralOutput
 from pywps.app.Common import Metadata
+
 
 class UltimateQuestion(Process):
     def __init__(self):
@@ -20,8 +22,8 @@ class UltimateQuestion(Process):
             metadata=[Metadata('Ultimate Question'), Metadata('What is the meaning of life')],
             inputs=inputs,
             outputs=outputs,
-            store_supported=False,
-            status_supported=False
+            store_supported=True,
+            status_supported=True
         )
 
     def _handler(self, request, response):

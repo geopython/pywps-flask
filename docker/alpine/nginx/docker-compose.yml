@@ -1,0 +1,14 @@
+version: '3.1'
+
+services:
+    pywps:
+        image: pywps/gunicorn-alpine:3.6
+    nginx:
+        image: pywps/nginx-alpine:3.6
+        build: .
+        depends_on:
+            - pywps
+        ports:
+            - 80:80
+        links:
+            - pywps

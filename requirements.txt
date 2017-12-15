@@ -1,13 +1,13 @@
-Flask==0.10.1
-Jinja2==2.7.3
-jsonschema==2.5.1
-lxml==3.4.2
-OWSLib==0.11.2
-pyproj==1.9.5.1
-requests==2.11.1
-Shapely==1.5.7
-Werkzeug==0.10.4
-SQLAlchemy==1.0.15
-psutil==4.3.1
+Flask
+Jinja2
+jsonschema
+lxml
+OWSLib
+pyproj
+requests
+Shapely
+Werkzeug
+SQLAlchemy
+psutil
 docker
--e git+https://github.com/lazaa32/pywps.git@master#egg=pywps-master
+-e git+https://github.com/lazaa32/pywps.git@develop#egg=pywps-develop

@@ -22,8 +22,8 @@ class UltimateQuestion(Process):
             metadata=[Metadata('Ultimate Question'), Metadata('What is the meaning of life')],
             inputs=inputs,
             outputs=outputs,
-            store_supported=True,
-            status_supported=True
+            store_supported=False,
+            status_supported=False
         )
 
     def _handler(self, request, response):

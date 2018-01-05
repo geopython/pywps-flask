@@ -3,8 +3,6 @@ workdir/*
 outputs/*
 logs/*
 
-docker/izolation*
-
 # vim, mac os
 *.sw*
 .DS_Store

@@ -2,7 +2,7 @@ FROM alpine:3.6
 MAINTAINER Jorge S. Mendes de Jesus <jorge.dejesus@geocat.net>
 
 ARG GDAL_VERSION=2.2.0
-ARG XERCES_VERSION=3.2.0
+ARG XERCES_VERSION=3.2.1
 ARG PROCESSOR_N=4
 
 RUN apk update && apk add --no-cache \

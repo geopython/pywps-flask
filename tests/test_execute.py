@@ -43,7 +43,8 @@ class Buffer(unittest.TestCase):
     def test_valid(self):
         "POST Execute request"
 
-        assert validate(self.url, self.schema_url, self.request_data)
+        validate(self.url, self.schema_url, self.request_data)
+
 
 
     #def test_valid_lineage(self):

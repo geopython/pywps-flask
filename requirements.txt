@@ -9,5 +9,4 @@ Shapely
 Werkzeug
 SQLAlchemy
 psutil
-docker
--e git+https://github.com/lazaa32/pywps.git@develop#egg=pywps-develop
+-e git+https://github.com/geopython/pywps.git@master#egg=pywps-master

@@ -23,7 +23,7 @@ It exposes the following processes:
 <ul>
 	{% for name, abstract in process_descriptor.items() %}
 	<li><b>{{ name }}</b> - {{ abstract }}</li> &nbsp;&nbsp;  
-	<a href='{{ server_url }}?request=DescribeProcess&service=WPS&identifier=all&version=1.0.0' target="_blank" title='{{ server_url }}?request=DescribeProcess&service=WPS&identifier={{ name }}&version=1.0.0'> <img src="/static/pics/PyWPS-DescribeProcess-green.svg" /></a>
+	<a href='{{ server_url }}?request=DescribeProcess&service=WPS&identifier={{name}}&version=1.0.0' target="_blank" title='{{ server_url }}?request=DescribeProcess&service=WPS&identifier={{ name }}&version=1.0.0'> <img src="/static/pics/PyWPS-DescribeProcess-green.svg" /></a>
 	{% endfor %}
 </ul>
 

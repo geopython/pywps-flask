@@ -50,7 +50,7 @@ config = {
     'license': 'MIT',
     'platforms': 'all',
     'url': 'http://pywps.org',
-    'download_url': 'https://github.com/geopython/pywps-flask',
+    'download_url': 'https://github.com/lazaa32/pywps-flask',
     'author_email': 'luis.a.de.sousa@gmail.com',
     'maintainer': 'Luis de Sousa',
     'maintainer_email': 'luis.de.sousa@protonmail.ch',
@@ -67,7 +67,7 @@ config = {
     'version': VERSION,
     'install_requires': INSTALL_REQUIRES,
     'dependency_links': [
-        'git+https://github.com/geopython/pywps.git@pywps-'+VERSION+'#egg=pywps-'+VERSION
+        'git+https://github.com/lazaa32/pywps.git@pywps-'+VERSION+'#egg=pywps-'+VERSION
      ],
     'packages': ['processes', 'tests'],
     'scripts': ['demo.py'],

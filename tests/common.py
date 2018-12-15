@@ -50,5 +50,9 @@ def validate(url, schema, post_data=None):
 
     schema = get_schema(schema)
 
-    return schema.validate(body_doc)
+    if schema.validate(body_doc):
+        return True
+    else:
+        print(body)
+        return False
 

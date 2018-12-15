@@ -7,6 +7,7 @@ logs/*
 *.sw*
 .DS_Store
 .*.un~
+.idea
 
 # python setup.py build/install artifacts
 build

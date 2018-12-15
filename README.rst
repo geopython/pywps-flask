@@ -1,3 +1,26 @@
+PyWPS demo with docker support
+==============================
+Clone pywps-flask, install libraries, build docker image (due to GDAL compiling lasts quite long)::
+
+    $ pip3 install -r requirements.txt
+    $ cd pywps-flask/docker/alpine/flask
+    $ docker build -t pywps_container .
+
+
+Clone pywps and OWSLib::
+
+    $ git clone https://github.com/lazaa32/pywps.git
+    $ git clone https://github.com/lazaa32/OWSLib.git
+
+Set PYTHONPATH::
+
+    $ export PYTHONPATH=$PYTHONPATH:$PWD/OWSLib:$PWD/pywps
+
+Run server::
+
+    python3 demo.py
+
+
 PyWPS example service
 ========================
 

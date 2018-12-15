@@ -1,6 +1,8 @@
 
-from pywps import Process, LiteralOutput
+from pywps.app import Process
+from pywps.inout.outputs import LiteralOutput
 from pywps.app.Common import Metadata
+
 
 class UltimateQuestion(Process):
     def __init__(self):

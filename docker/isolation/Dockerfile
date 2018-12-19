@@ -1,10 +1,11 @@
-FROM alpine:latest
+FROM alpine:3.6
 MAINTAINER Jorge S. Mendes de Jesus <jorge.dejesus@geocat.net>
 
-ENV GDAL_VERSION 2.2.0
-ENV XERCES_VERSION 3.2.0
+ARG GDAL_VERSION=2.3.2
+ARG XERCES_VERSION=3.2.2
+ARG PROCESSOR_N=4
 
-RUN apk add --no-cache \
+RUN apk update && apk add --no-cache \
 	git \
 	gcc \
 	bash \
@@ -26,7 +27,7 @@ RUN wget http://www.apache.org/dist/xerces/c/3/sources/xerces-c-${XERCES_VERSION
     tar xvf /tmp/xerces-c-${XERCES_VERSION}.tar.gz -C /tmp && \
     cd /tmp/xerces-c-${XERCES_VERSION} && \
     ./configure --prefix=/opt/xerces && \
-    make -j 4 && \
+    make -j $PROCESSOR_N && \
     make install
 
 # Geos
@@ -40,13 +41,13 @@ RUN wget http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION}.tar
 	tar xzf /tmp/gdal.tar.gz -C /tmp && \
 	cd /tmp/gdal-${GDAL_VERSION} && \
 	CFLAGS="-g -Wall" LDFLAGS="-s" ./configure --with-expat=yes --with-xerces=/opt/xerces --with-geos=yes \
-	&& make -j 4 && make install
+	&& make -j $PROCESSOR_N && make install
 
 RUN cd /tmp/gdal-${GDAL_VERSION}/swig/python \
 	&& python3 setup.py build \
 	&& python3 setup.py install
 
-RUN git clone https://github.com/lazaa32/pywps-flask.git
+RUN git clone https://github.com/geopython/pywps-flask.git
 
 WORKDIR /pywps-flask
 RUN pip3 install -r requirements.txt

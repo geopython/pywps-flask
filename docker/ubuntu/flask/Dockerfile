@@ -3,7 +3,7 @@ FROM phusion/baseimage:0.9.22
 MAINTAINER Jorge S. Mendes de Jesus <jorge.dejesus@geocat.net>
 
 ARG ROOTDIR=/usr/local/ 
-ARG GDAL_VERSION=2.2.3 
+ARG GDAL_VERSION=2.3.2
 ARG PROCESSOR_N=8
 
 WORKDIR $ROOTDIR/

@@ -16,4 +16,4 @@ install:
 before_script:
     "python demo.py -d"
 
-script: "python tests/__init__.py"
+script: "python -m unittest tests"

@@ -9,4 +9,4 @@ Shapely
 Werkzeug
 SQLAlchemy
 psutil
--e git+https://github.com/geopython/pywps.git@master#egg=pywps-master
+-e git+https://github.com/geopython/pywps.git@4.2.1#egg=pywps-4.2.1

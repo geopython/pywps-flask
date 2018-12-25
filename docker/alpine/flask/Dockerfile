@@ -1,8 +1,10 @@
 FROM alpine:3.6
 MAINTAINER Jorge S. Mendes de Jesus <jorge.dejesus@geocat.net>
 
-ARG GDAL_VERSION=2.2.0
-ARG XERCES_VERSION=3.2.1
+
+ARG GDAL_VERSION=2.3.2
+ARG XERCES_VERSION=3.2.2
+>>>>>>> upstream/master
 ARG PROCESSOR_N=4
 
 RUN apk update && apk add --no-cache \
@@ -21,7 +23,8 @@ RUN apk update && apk add --no-cache \
     g++ \
     libstdc++ \
     make \
-    swig  
+    swig
+
 RUN apk add --no-cache \
     --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing \
     geos \

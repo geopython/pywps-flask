@@ -3,7 +3,7 @@ Installation
 ============
 
 The app depends on PyWPS and several other libraries that are listed in
-``requirements.txt``. It is advisable to run it using a python virtualenv to prevent package instalation problems
+``requirements.txt``. It is advisable to run it using a python virtualenv to prevent package instalation problems::
 
     $ virtualenv -p python3 pywps_flask_env
     $ cd pywps_flask_dir
@@ -13,7 +13,7 @@ The app depends on PyWPS and several other libraries that are listed in
     $ pip3 install -r requirements.txt
 
 
-If python virtualenv is not an option:
+If python virtualenv is not an option::
 
     $ git clone https://github.com/geopython/pywps-flask
     $ cd pywps-flask
@@ -26,7 +26,7 @@ For Debian based systems you will need to install GDAL with::
     $ sudo apt-get install python3-gdal
 
 
-When using only using `requirement.txt`, the `pywps-flask` will run for the directory that was pulled from github, for a system wise installation is it advisable to use `setup.py`
+When using only using `requirement.txt`, the `pywps-flask` will run for the directory that was pulled from github, for a system wise installation is it advisable to use `setup.py`::
 
     $ git clone https://github.com/geopython/pywps-flask
     $ cd pywps-flask
@@ -43,7 +43,7 @@ Simply run the python file::
 
 The flag `-a` will bind to the ip range `0.0.0.0` and is normally the safest option access to `pypwps-flask`
 
-The `-d`  option will run pywps-flask as daemon and to stop it is necessary to determine the PID and kill it, one trick is to use fuser to determine PID, and then use it to kill the process
+The `-d`  option will run pywps-flask as daemon and to stop it is necessary to determine the PID and kill it, one trick is to use fuser to determine PID, and then use it to kill the process::
 
     $ fuser tcp/5000
     $ kill -15 <PID RETURNED PREVIOUSLY>
@@ -83,12 +83,12 @@ Pywps will be available in  the following URL::
 
 
 Gunicorn-Alpine (production)
----------------------------
+----------------------------
 
-This image implements the previous ``flask-alpine image`` (you need to build it first, or it will be automatically pulled from dockerhub) but wrapping flask in a WSGI server (gunicorn) where each worker runs a an app. This image allows for the following environment variables::
+This image implements the previous ``flask-alpine image`` (you need to build it first, or it will be automatically pulled from dockerhub) but wrapping flask in a WSGI server (gunicorn) where each worker runs a an app. This image allows for the following environment variables:
 
-* GU_WORKERS - Numer or workers. Gunicorn uses a set of workers to run pywps (normally ``workers = (2 * cpu) + 1``).  (default: 5)
-* GU_PORT  - Port running Gunicorn (default:8081)
+ - GU_WORKERS - Numer or workers. Gunicorn uses a set of workers to run pywps (normally ``workers = (2 * cpu) + 1``).  (default: 5)
+ - GU_PORT  - Port running Gunicorn (default:8081)
 
 
 
@@ -102,9 +102,11 @@ To build the image (inside the folder with the Dockerfile)::
 
 
 And to run it::
+
     $ docker run -p 8081:8081 -it pywps/gunicorn-alpine:latest
 
-or:: 
+or::
+ 
     $ docker run -e GU_WORKERS=10 -e GU_PORT=8082  -p 8082:8082 -it pywps/gunicorn-alpine:latest
 
 Pywps will be available in  the following URL::
@@ -118,7 +120,7 @@ Nginx-Alpine
 This is the complete stack intented for production, to have a stack we require to use ``docker-compose`` 
 to build two images: ``pywps/gunicorn-alpine:latest``  and ``pywps/nginx-alpine:latest`` 
 
-Those images will be pulled from dockerhub, but they can compiled locally by building Flask-Alpine, Gunicron-Alpine and Nginx-Alpine, in this case only showing for nginx
+Those images will be pulled from dockerhub, but they can compiled locally by building Flask-Alpine, Gunicron-Alpine and Nginx-Alpine, in this case only showing for nginx::
 
 
    $ cd docker/alpine/nginx/Dockerfile
@@ -138,7 +140,7 @@ In this case pywps (only the WPS) will be avalable on::
 Flask-Ubuntu (basic)
 --------------------
 
-The same as ``Flask-Ubuntu`` but using phusion image (ubuntu 18.04)
+The same as ``Flask-Ubuntu`` but using phusion image (ubuntu 18.04)::
 
 
     $ cd docker/ubuntu/flask/Dockerfile
@@ -152,7 +154,7 @@ And to run it::
 Nginx-Ubuntu (production)
 -------------------------
 
-This image is based on ``Flask-Ubuntu`` and will require it (either build locally or pull from dockerhub). This image has Nginx and Gunicorn totally integrated as services in a docker image
+This image is based on ``Flask-Ubuntu`` and will require it (either build locally or pull from dockerhub). This image has Nginx and Gunicorn totally integrated as services in a docker image::
 
 
    $ cd docker/ubuntu/nginx/Dockerfile
@@ -162,7 +164,7 @@ And to run it::
 
    $ docker run -p 80:80 pywps/nginx-ubuntu
 
-It is possible to set the number of Gunicorn workers::
+It is possible to set the number of Gunicorn workers:
 
 * GU_WORKERS - Numer or workers.  (default: 5)
 
@@ -185,7 +187,7 @@ Named volumes allow for container content to be available in the host system. Th
 And file:
 * /pywps-flask/pywps.cfg 
 
-Named volumes need to be created prior to ``docker run``
+Named volumes need to be created prior to ``docker run``::
 
     $ docker volume create pywps_logs
     $ docker volume create pywps_outputs
@@ -205,18 +207,7 @@ To run a docker will all the volumes available in the host::
                             -v pywps_cfg:/pywps-flask/pywps.cfg  pywps/flask-alpine:latest
 
 
-
-
-
- 
-
-
-
-
- 
-
-
-
-
+THE END
+=======
 
 

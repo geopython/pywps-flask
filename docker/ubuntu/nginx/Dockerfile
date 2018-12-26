@@ -1,5 +1,5 @@
 #based on https://hub.docker.com/r/geographica/gdal2/~/dockerfile/
-FROM pywps/flask-ubuntu:16.0.4
+FROM pywps/flask-ubuntu:latest
 MAINTAINER Jorge S. Mendes de Jesus <jorge.dejesus@geocat.net>
 
 #For Gunicorn
@@ -17,7 +17,6 @@ RUN pip3 install gunicorn
 RUN ln -s /pywps-flask/wsgi/pywps.wsgi  /pywps-flask/wsgi/pywps_app.py
 
 
-
 COPY pywps4_service.sh /etc/service/pywps4/run
 RUN chmod +x /etc/service/pywps4/run
 
@@ -26,12 +25,10 @@ COPY nginx_service.sh /etc/service/nginx/run
 RUN chmod +x /etc/service/nginx/run
 
 EXPOSE 80
- 
-#EXPOSE 5000
-#ENTRYPOINT ["/usr/bin/python3", "demo.py","-a"]
 
-#docker build -t pywps-flask . 
-#docker run -p 5000:5000 pywps-flask
+
+#docker build -t pywps/nginx-ubuntu . 
+#docker run -p 80:80 pywps/nginx-ubuntu
 #http://localhost:5000/wps?request=GetCapabilities&service=WPS
 #http://localhost:5000/wps?request=DescribeProcess&service=WPS&identifier=all&version=1.0.0    
    	

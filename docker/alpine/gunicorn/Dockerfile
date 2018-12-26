@@ -1,5 +1,5 @@
-FROM pywps/flask-alpine:3.6
-MAINTAINER Jorge Samuel Mendes de Jesus <jorge.dejesus@geocat.net>
+FROM pywps/flask-alpine:latest
+MAINTAINER Jorge Samuel Mendes de Jesus <jorge.dejesus@protonmail.com>
 
 #For Gunicorn
 ARG GU_WORKERS=5
@@ -17,7 +17,7 @@ RUN ln -s /pywps-flask/wsgi/pywps.wsgi  /pywps-flask/wsgi/pywps_app.py
 
 ENTRYPOINT ["/run_all.sh"]
 
-#Build: docker build -t pywps4:gunicorn .
-#Usage: docker run -p 8081:8081 -it pywps4:nginx
-#Usage w/ 10 workers: docker run -e GU_WORKERS=10 -e GU_PORT=8082  -p 8082:8082 -it pywps4:gunicorn
+#Build: docker build -t pywps/gunicorn-alpine:latest .
+#Usage: docker run -p 8081:8081 -it pywps/gunicorn-alpine:latest
+#Usage w/ 10 workers: docker run -e GU_WORKERS=10 -e GU_PORT=8082  -p 8082:8082 -it pywps/gunicorn-alpine:latest
 

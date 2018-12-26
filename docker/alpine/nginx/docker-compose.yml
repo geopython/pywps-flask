@@ -2,9 +2,9 @@ version: '3.1'
 
 services:
     pywps:
-        image: pywps/gunicorn-alpine:3.6
+        image: pywps/gunicorn-alpine:latest
     nginx:
-        image: pywps/nginx-alpine:3.6
+        image: pywps/nginx-alpine:latest
         build: .
         depends_on:
             - pywps

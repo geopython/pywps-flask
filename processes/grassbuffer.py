@@ -8,10 +8,11 @@ __author__ = 'Jachym'
 
 
 class GrassBuffer(Process):
+    
     def __init__(self):
         inputs = [ComplexInput('poly_in', 'Input1',
                   supported_formats=[Format('application/gml+xml')],
-                  mode=MODE.STRICT),
+                  mode=MODE.SIMPLE),
                   LiteralInput('buffer', 'Buffer', data_type='float',
                   allowed_values=(0, 1, 10, (10, 10, 100), (100, 100, 1000)))]
         outputs = [ComplexOutput('buff_out', 'Buffered',

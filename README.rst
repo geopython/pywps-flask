@@ -109,7 +109,7 @@ or::
  
     $ docker run -e GU_WORKERS=10 -e GU_PORT=8082  -p 8082:8082 -it pywps/gunicorn-alpine:latest
 
-Pywps will be available in  the following URL::
+Pywps will be available at the following URL::
 
     $ http://localhost:8082 
 
@@ -143,7 +143,7 @@ Flask-Ubuntu (basic)
 The same as ``Flask-Ubuntu`` but using phusion image (ubuntu 18.04)::
 
 
-    $ cd docker/ubuntu/flask/Dockerfile
+    $ cd docker/ubuntu/flask
     $ docker build -t pywps/flask-ubuntu:latest .
 
 And to run it::
@@ -157,8 +157,8 @@ Nginx-Ubuntu (production)
 This image is based on ``Flask-Ubuntu`` and will require it (either build locally or pull from dockerhub). This image has Nginx and Gunicorn totally integrated as services in a docker image::
 
 
-   $ cd docker/ubuntu/nginx/Dockerfile
-   $ docker build -t pywps/nginx-ubuntu
+   $ cd docker/ubuntu/nginx
+   $ docker build -t pywps/nginx-ubuntu .
 
 And to run it::
 

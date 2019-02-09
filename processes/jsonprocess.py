@@ -11,7 +11,7 @@ class TestJson(Process):
             self._handler,
             identifier='testjson',
             title='Process Test',
-            version='1.0.0.0',
+            version='1.0.0',
             inputs=inputs,
             outputs=outputs,
             store_supported=True,
